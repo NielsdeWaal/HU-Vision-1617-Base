@@ -13,7 +13,7 @@
 class ImageFactory {
 public:
 
-	static class Implementation {
+	class Implementation {
 		public:
 			virtual RGBImage * newRGBImage(const int width, const int height) const = 0;
 			virtual IntensityImage * newIntensityImage(const int width, const int height) const = 0;
@@ -23,7 +23,7 @@ public:
 	};
 
 
-	static class ImplementationStudent : public Implementation {
+	class ImplementationStudent : public Implementation {
 		public:
 			RGBImage * newRGBImage(const int width, const int height) const;
 			IntensityImage * newIntensityImage(const int width, const int height) const;
@@ -31,7 +31,7 @@ public:
 			IntensityImage * newIntensityImage() const;
 	};
 
-	static class ImplementationPrivate : public Implementation {
+	class ImplementationPrivate : public Implementation {
 		public:
 			RGBImage * newRGBImage(const int width, const int height) const;
 			IntensityImage * newIntensityImage(const int width, const int height) const;
