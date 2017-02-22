@@ -4,7 +4,8 @@
 * Proprietary and confidential
 */
 
-#include "export.h"
+//#include "export.h"
+#include "DLLExecution.h"
 
 #include <iostream>
 
@@ -31,10 +32,10 @@ void freeDLLExecutionTask(DLLExecution * dllExecution) {
 void setImageImplementation(bool student) {
 	if (student) {
 		//std::cout << "Implementation student!" << std::endl;
-		ImageFactory::setImplementation(ImageFactory::STUDENT);
+		ImageFactory::setImplementation(*ImageFactory::STUDENT);
 	} else {
 		//std::cout << "Implementation private!" << std::endl;
-		ImageFactory::setImplementation(ImageFactory::DEFAULT);
+		ImageFactory::setImplementation(*ImageFactory::DEFAULT);
 	}
 }
 

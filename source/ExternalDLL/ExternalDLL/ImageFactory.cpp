@@ -83,9 +83,10 @@ RGBImage * ImageFactory::newRGBImage(const RGBImage &other) {
 }
 
 
-
-ImageFactory::Implementation &ImageFactory::DEFAULT = ImageFactory::ImplementationPrivate();
-ImageFactory::Implementation &ImageFactory::STUDENT = ImageFactory::ImplementationStudent();
+std::unique_ptr<ImageFactory::Implementation> ImageFactory::DEFAULT
+= std::make_unique<ImageFactory::ImplementationPrivate>();
+std::unique_ptr<ImageFactory::Implementation> ImageFactory::STUDENT
+= std::make_unique<ImageFactory::ImplementationStudent>();
 
 
 

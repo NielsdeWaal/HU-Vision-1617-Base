@@ -7,6 +7,9 @@
 #pragma once
 #include "RGBImage.h"
 #include "IntensityImage.h"
+
+#include <memory>
+
 class ImageFactory {
 public:
 
@@ -47,8 +50,8 @@ public:
 	//rtual ~ImageFactory();
 
 
-	static ImageFactory::Implementation &DEFAULT;
-	static ImageFactory::Implementation &STUDENT;
+	static std::unique_ptr<ImageFactory::Implementation> DEFAULT;
+	static std::unique_ptr<ImageFactory::Implementation> STUDENT;
 
 private:
 	static ImageFactory::Implementation * implementation;

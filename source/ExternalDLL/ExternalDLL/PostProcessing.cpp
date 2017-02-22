@@ -80,8 +80,10 @@ bool PostProcessing::stepLocalizeAdditionalFeatures(const IntensityImage &image,
 		}
 	}
 
-	features.putFeature(Feature(Feature::FEATURE_HEAD_LEFT_NOSE_MIDDLE, Point2D<double>(left, eyePosY + std::round(distanceBetweenEyesAndNoseBottom / 2.0))));
-	features.putFeature(Feature(Feature::FEATURE_HEAD_RIGHT_NOSE_MIDDLE, Point2D<double>(right, eyePosY + std::round(distanceBetweenEyesAndNoseBottom / 2.0))));
+    { auto feature = Feature(Feature::FEATURE_HEAD_LEFT_NOSE_MIDDLE, Point2D<double>(left, eyePosY + std::round(distanceBetweenEyesAndNoseBottom / 2.0)));
+        features.putFeature(feature); }
+    { auto feature = Feature(Feature::FEATURE_HEAD_RIGHT_NOSE_MIDDLE, Point2D<double>(right, eyePosY + std::round(distanceBetweenEyesAndNoseBottom / 2.0)));
+        features.putFeature(feature); }
 
 	return true;
 }
