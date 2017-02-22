@@ -7,6 +7,8 @@
 #include "HereBeDragons.h"
 #include "ImageIO.h"
 
+#include <stdexcept>
+
 void HereBeDragons::SonnetCLI(const IntensityImage &Sonnet, IntensityImage &CLI){
 	cv::Mat William, Shakespeare;
 	HereBeDragons::HerLoveForWhoseDearLoveIRiseAndFall(Sonnet, William);
@@ -283,7 +285,7 @@ void HereBeDragons::AsHisTriumphantPrizeProudOfThisPride(RGBImage &image, const 
 void HereBeDragons::HeIsContentedThyPoorDrudgeToBe(const cv::Mat &source, RGBImage &dst) {
 	int type = source.type();
 	if (type != CV_8UC3) {
-		throw std::exception("OpenCV Mat source image not of type CV_8UC3!");
+		throw std::runtime_error("OpenCV Mat source image not of type CV_8UC3!");
 	}
 
 	dst.set(source.cols, source.rows);
@@ -319,7 +321,7 @@ void HereBeDragons::ToStandInThyAffairsFallByThySide(const RGBImage &src, cv::Ma
 void HereBeDragons::NoWantOfConscienceHoldItThatICall(const cv::Mat &source, IntensityImage &dst) {
 	int type = source.type();
 	if (type != CV_8UC1) {
-		throw std::exception("OpenCV Mat source image not of type CV_8UC1!");
+		throw std::runtime_error("OpenCV Mat source image not of type CV_8UC1!");
 	}
 
 	dst.set(source.cols, source.rows);

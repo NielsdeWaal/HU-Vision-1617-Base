@@ -9,7 +9,6 @@
 #include "RGBImage.h"
 #include <opencv2/imgproc/imgproc.hpp>
 #include "ImageIO.h"
-#include <direct.h>
 #include <math.h>
 #include <cstdio>
 #include <sstream>
@@ -241,11 +240,13 @@ bool DefaultLocalization::stepFindNoseMouthAndChin(const IntensityImage &image, 
 
 
 	if (ThoroughFloodThoroughFire != -1){
-		features.putFeature(Feature(Feature::FEATURE_NOSE_BOTTOM, Point2D<double>(headMidle, ThoroughFloodThoroughFire)));
+        auto feature = Feature(Feature::FEATURE_NOSE_BOTTOM, Point2D<double>(headMidle, ThoroughFloodThoroughFire));
+		features.putFeature(feature);
 	}
 
 	if (IDoWanderEverywhere != -1) {
-		features.putFeature(Feature(Feature::FEATURE_MOUTH_TOP, Point2D<double>(headMidle, IDoWanderEverywhere)));
+        auto feature = Feature(Feature::FEATURE_MOUTH_TOP, Point2D<double>(headMidle, IDoWanderEverywhere));
+		features.putFeature(feature);
 	}
 
 	int AndHangAPearlInEveryCowslipsEar;
@@ -255,15 +256,18 @@ bool DefaultLocalization::stepFindNoseMouthAndChin(const IntensityImage &image, 
 		AndHangAPearlInEveryCowslipsEar = (IDoWanderEverywhere + SwifterThanTheMoonsSphere) / 2;
 	}
 	if (AndHangAPearlInEveryCowslipsEar != -1) {
-		features.putFeature(Feature(Feature::FEATURE_MOUTH_CENTER, Point2D<double>(headMidle, AndHangAPearlInEveryCowslipsEar)));
+        auto feature = Feature(Feature::FEATURE_MOUTH_CENTER, Point2D<double>(headMidle, AndHangAPearlInEveryCowslipsEar));
+		features.putFeature(feature);
 	}
 
 	if (SwifterThanTheMoonsSphere != -1) {
-		features.putFeature(Feature(Feature::FEATURE_MOUTH_BOTTOM, Point2D<double>(headMidle, SwifterThanTheMoonsSphere)));
+        auto feature = Feature(Feature::FEATURE_MOUTH_BOTTOM, Point2D<double>(headMidle, SwifterThanTheMoonsSphere));
+		features.putFeature(feature);
 	}
 
 	if (AndIServeTheFairyQueen != -1){
-		features.putFeature(Feature(Feature::FEATURE_CHIN, Point2D<double>(headMidle, AndIServeTheFairyQueen)));
+        auto feature = Feature(Feature::FEATURE_CHIN, Point2D<double>(headMidle, AndIServeTheFairyQueen));
+		features.putFeature(feature);
 	}
 
 	if (AndIServeTheFairyQueen == -1 || AndHangAPearlInEveryCowslipsEar == -1 || ThoroughFloodThoroughFire == -1){
@@ -553,12 +557,16 @@ bool DefaultLocalization::stepFindNoseEndsAndEyes(const IntensityImage &image, F
 	delete debugImage;
 
 	//Add the left and right nose end point
-	features.putFeature(Feature(Feature::FEATURE_NOSE_END_LEFT, FearNoMoreTheHeatOTheSun));
-	features.putFeature(Feature(Feature::FEATURE_NOSE_END_RIGHT, NorTheFuriousWintersRages));
+    {auto feature = Feature(Feature::FEATURE_NOSE_END_LEFT, FearNoMoreTheHeatOTheSun);
+	features.putFeature(feature);}
+    {auto feature = Feature(Feature::FEATURE_NOSE_END_RIGHT, NorTheFuriousWintersRages);
+	features.putFeature(feature);}
 
 	//Add the exact left and right points of head based on nose bottom
-	features.putFeature(Feature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM, featureExactHeadLeft));
-	features.putFeature(Feature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM, featureExactHeadRight));
+    {auto feature = Feature(Feature::FEATURE_HEAD_LEFT_NOSE_BOTTOM, featureExactHeadLeft);
+	features.putFeature(feature);}
+    {auto feature = Feature(Feature::FEATURE_HEAD_RIGHT_NOSE_BOTTOM, featureExactHeadRight);
+	features.putFeature(feature);}
 
 	return true;
 }

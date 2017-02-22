@@ -6,13 +6,29 @@
 
 #include "ImageIO.h"
 #include <opencv2/highgui/highgui.hpp>
+#ifdef _WIN32
 #include <direct.h>
+#endif
 #include <stdexcept>
 #include <stdlib.h>
 #include <iostream>
 #include "HereBeDragons.h"
 
 using namespace cv;
+
+#ifndef _WIN32
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <cerrno>
+
+void _mkdir(const char *path) {
+    if (mkdir(path, 0777) < 0)
+        throw std::runtime_error(std::string("mkdir failed for path <")
+                                 + path + ">, " + strerror(errno));
+}
+
+#endif
 
 
 std::string ImageIO::debugFolder = "";
