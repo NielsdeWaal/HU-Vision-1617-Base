@@ -23,7 +23,8 @@ using namespace cv;
 #include <cerrno>
 
 void _mkdir(const char *path) {
-    if (mkdir(path, 0777) < 0)
+    int ret = mkdir(path, 0755);
+    if (ret < 0 && errno != EEXIST)
         throw std::runtime_error(std::string("mkdir failed for path <")
                                  + path + ">, " + strerror(errno));
 }
