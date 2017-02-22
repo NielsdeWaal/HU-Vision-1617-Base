@@ -1,0 +1,22 @@
+#+PROPERTY: header-args :padline no
+#+OPTIONS: toc:2 tags:nil
+#+LATEX_HEADER: \usepackage[margin=3.0cm]{geometry}
+#+LATEX_HEADER: \usepackage[section]{placeins}
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_CLASS: article
+#+TITLE: Implementatieplan Edge Detection
+#+AUTHOR: Chris Smeele (1681546), Philippe Zwietering (1685431)
+#+DATE: 22-02-2017
+
+* Doel
+Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht gekregen om
+een stap uit een gezichtsherkenningsproces te herschrijven met onze eigen
+code. Wij hebben hier gekozen voor de edge detection. Wij denken dat wij dit
+minstens zo goed kunnen doen als dat wat er al is.
+
+Het probleem bij edge detection dat wordt opgelost, is om duidelijke randen van
+een gezicht en onderdelen daarvan zichtbaar te krijgen. Dit is een zeer
+belangrijke stap voor de rest van het proces van gezichtsherkenning, omdat
+zowel de localisatie en extractie van features hier op berusten. Het
+eindresultaat zou dan ook altijd een scherp belijnde, zwart-wit plaatje moeten
+zijn waarin alle features van het gezicht nog steeds goed herkenbaar zijn.
