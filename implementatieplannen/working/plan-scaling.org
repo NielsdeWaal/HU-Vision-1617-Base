@@ -31,9 +31,12 @@ Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritm
 - Fourier-based interpolation
 - Edge-directed interpolation
 
-
+Dit lijstje staat al op volgorde van moeilijkheidsgraad. Nearest-neighbor interpolation is duidelijk het simpelst,
+terwijl er in edge-directed interpolation recent nog nieuwe vooruitgangen zijn geboekt. Omgekeerd wil dit niet zeggen
+edge-directed interpolation meteen het beste resultaat geeft. 
 
 # Bronnen: https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
 # http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
 # http://www.datagenetics.com/blog/december32013/index.html
 # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
+# https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms Voor de wikipedia vergelijkingsplaatjes
