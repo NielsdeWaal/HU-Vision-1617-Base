@@ -17,8 +17,23 @@ dat alle afbeeldingen ongeveer evenveel pixels bevatten.
 
 Het probleem dat bij scaling moet worden opgelost is dat afbeeldingen tot het juiste formaat worden geschaald, waarbij
 er rekening mee wordt gehouden dat er zo min mogelijk informatie verloren gaat bij het omlaag schalen van afbeeldingen.
-Er zijn dan natuurlijk minder pixels beschikbaar, dus minder ruimte voor informatie over de afbeelding, en dat vergt enig
-nadenken over hoe daarmee om moet worden gegaan, want simpelweg data weggooien is waarschijnlijk niet beste manier.
-Aan de andere kant is het prettig om het proces zo snel mogelijk te laten verlopen. Hier moet een goede balans tussen
-gevonden worden. Het verwachte eindresultaat is een afbeelding van 200 bij 200 pixels, die nog goed herkenbaar is als
-gezicht.
+Bij het opschalen van afbeeldingen moet er juist worden nagedacht hoe ervoor wordt gezorgd dat de juiste invulling wordt
+gegeven aan de extra pixels, oftewel interpolatie.
+Aan de andere kant is het prettig om het proces zo snel mogelijk te laten verlopen. Het verwachte eindresultaat is een
+afbeelding van 200 bij 200 pixels, die nog goed herkenbaar is als gezicht.
+
+* Methoden
+Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritmen, namelijk:
+- Nearest-neighbor interpolation
+- Bilinear interpolation
+- Bicubic interpolation
+- Box sampling
+- Fourier-based interpolation
+- Edge-directed interpolation
+
+
+
+# Bronnen: https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
+# http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
+# http://www.datagenetics.com/blog/december32013/index.html
+# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
