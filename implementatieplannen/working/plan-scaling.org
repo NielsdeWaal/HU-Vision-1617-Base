@@ -1,0 +1,24 @@
+#+PROPERTY: header-args :padline no
+#+OPTIONS: toc:2 tags:nil
+#+LATEX_HEADER: \usepackage[margin=3.0cm]{geometry}
+#+LATEX_HEADER: \usepackage[section]{placeins}
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_CLASS: article
+#+TITLE: Implementatieplan Scaling
+#+AUTHOR: Chris Smeele (1681546), Philippe Zwietering (1685431)
+#+DATE: 22-02-2017
+
+* Doel
+Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht gekregen om een stap uit een
+gezichtsherkenningsproces te herschrijven met onze eigen code. Wij hebben hier gekozen voor het schalen van
+afbeeldingen bij het pre-processen. Wij denken dat wij dit minstens zo goed kunnen doen als de oplossing die er al is
+en vinden deze stap ook belangrijk voor gezichtsherkenning. Het is voor de rest van het proces namelijk heel belangrijk
+dat alle afbeeldingen ongeveer evenveel pixels bevatten.
+
+Het probleem dat bij scaling moet worden opgelost is dat afbeeldingen tot het juiste formaat worden geschaald, waarbij
+er rekening mee wordt gehouden dat er zo min mogelijk informatie verloren gaat bij het omlaag schalen van afbeeldingen.
+Er zijn dan natuurlijk minder pixels beschikbaar, dus minder ruimte voor informatie over de afbeelding, en dat vergt enig
+nadenken over hoe daarmee om moet worden gegaan, want simpelweg data weggooien is waarschijnlijk niet beste manier.
+Aan de andere kant is het prettig om het proces zo snel mogelijk te laten verlopen. Hier moet een goede balans tussen
+gevonden worden. Het verwachte eindresultaat is een afbeelding van 200 bij 200 pixels, die nog goed herkenbaar is als
+gezicht.
