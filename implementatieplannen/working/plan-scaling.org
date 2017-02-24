@@ -28,15 +28,30 @@ Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritm
 - Bilinear interpolation
 - Bicubic interpolation
 - Box sampling
-- Fourier-based interpolation
 - Edge-directed interpolation
 
-Dit lijstje staat al op volgorde van moeilijkheidsgraad. Nearest-neighbor interpolation is duidelijk het simpelst,
-terwijl er in edge-directed interpolation recent nog nieuwe vooruitgangen zijn geboekt. Omgekeerd wil dit niet zeggen
-edge-directed interpolation meteen het beste resultaat geeft. 
+Dit lijstje staat al op volgorde van moeilijkheidsgraad en benodigde rekenkracht. Nearest-neighbor interpolation is
+duidelijk het simpelst, terwijl er in edge-directed interpolation recent nog nieuwe vooruitgangen zijn geboekt.
+Nearest-neighbor tot box-sampling staan ook op omgekeerde volgorde van nauwkeurigheid.
+Bicubic interpolation heeft alleen wel het nadeel ten opzichte van bilinear interpolation dat het overbelichting kan
+veroorzaken, maar heeft wel een groter detailbehoud dan bilinear interpolation.
+TODO: Box-sampling heeft dit probleem niet (???) en is nauwkeuriger dan bicubic interpolation,
+maar is aanzienlijk moeilijker te implementeren.
+Box-sampling en bicubic interpolation hebben wel dezelfde benodigde rekenkracht [bron].
+Edge-directed interpolation is niet per se een nauwkeurigere interpolatie methode, dit is terug te zien in [bron], want
+het focust vooral op het behouden van edges in het schalingsproces.
 
-# Bronnen: https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
-# http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
-# http://www.datagenetics.com/blog/december32013/index.html
-# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
-# https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms Voor de wikipedia vergelijkingsplaatjes
+* Keuze
+We hebben ervoor gekozen om nearest-neighbor, bilinear en bicubic interpolation te implementeren.
+Dit omdat we graag verschillende, veel-gebruikte methoden willen vergelijken. Alle hogere orde methoden zijn ook 
+waarschijnlijk te ingewikkeld om door ons geïmplementeerd te worden.
+
+# Bronnen:
+# Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
+# Simpelere vergelijking http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
+# Nuttige site met vergelijkingen http://www.datagenetics.com/blog/december32013/index.html
+# Crazy overpowerede methode (edge-directed) http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
+# Voor de wikipedia vergelijkingsplaatjes https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
+# Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
+# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.320.776&rep=rep1&type=pdf
+# Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
