@@ -43,7 +43,7 @@ het focust vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
 We hebben ervoor gekozen om nearest-neighbor, bilinear en bicubic interpolation te implementeren.
-Dit omdat we graag verschillende, veel-gebruikte methoden willen vergelijken. Alle hogere orde methoden zijn ook 
+Dit omdat we graag verschillende, veel-gebruikte methoden willen vergelijken. Alle hogere orde methoden zijn ook
 waarschijnlijk te ingewikkeld om door ons geïmplementeerd te worden.
 
 # Bronnen:
@@ -53,5 +53,5 @@ waarschijnlijk te ingewikkeld om door ons geïmplementeerd te worden.
 # Crazy overpowerede methode (edge-directed) http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
 # Voor de wikipedia vergelijkingsplaatjes https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
 # Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
-# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.320.776&rep=rep1&type=pdf
+# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?datuoi=10.1.1.320.776&rep=rep1&type=pdf
 # Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
