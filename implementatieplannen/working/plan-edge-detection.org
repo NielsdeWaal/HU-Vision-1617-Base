@@ -20,3 +20,6 @@ belangrijke stap voor de rest van het proces van gezichtsherkenning, omdat
 zowel de localisatie en extractie van features hier op berusten. Het
 eindresultaat zou dan ook altijd een scherp belijnde, zwart-wit plaatje moeten
 zijn waarin alle features van het gezicht nog steeds goed herkenbaar zijn.
+
+* Implementatie
+
