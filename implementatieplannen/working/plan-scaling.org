@@ -9,20 +9,31 @@
 #+DATE: 22-02-2017
 
 * Doel
-Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht gekregen om een stap uit een
-gezichtsherkenningsproces te herschrijven met onze eigen code. Wij hebben hier gekozen voor het schalen van
-afbeeldingen bij het pre-processen. Wij denken dat wij dit minstens zo goed kunnen doen als de oplossing die er al is
-en vinden deze stap ook belangrijk voor gezichtsherkenning. Het is voor de rest van het proces namelijk heel belangrijk
-dat alle afbeeldingen ongeveer evenveel pixels bevatten.
+Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht
+gekregen om een stap uit een gezichtsherkenningsproces te herschrijven
+met onze eigen code. Wij hebben hier gekozen voor het schalen van
+afbeeldingen bij het pre-processen. Wij denken dat wij dit minstens zo
+goed kunnen doen als de oplossing die er al is. Het is voor de rest
+van het proces belangrijk dat alle afbeeldingen ongeveer evenveel
+pixels bevatten.
 
-Het probleem dat bij scaling moet worden opgelost is dat afbeeldingen tot het juiste formaat worden geschaald, waarbij
-er rekening mee wordt gehouden dat er zo min mogelijk informatie verloren gaat bij het omlaag schalen van afbeeldingen.
-Bij het opschalen van afbeeldingen moet er juist worden nagedacht hoe ervoor wordt gezorgd dat de juiste invulling wordt
-gegeven aan de extra pixels, oftewel interpolatie.
-Aan de andere kant is het prettig om het proces zo snel mogelijk te laten verlopen. Het verwachte eindresultaat is een
-afbeelding van 200 bij 200 pixels, die nog goed herkenbaar is als gezicht.
+Het probleem dat bij scaling moet worden opgelost is dat afbeeldingen
+tot het juiste formaat worden geschaald, waarbij er rekening mee wordt
+gehouden dat er zo min mogelijk informatie verloren gaat bij het
+omlaag schalen van afbeeldingen.
+
+Bij het opschalen van afbeeldingen moet er juist worden nagedacht hoe
+ervoor wordt gezorgd dat de juiste invulling wordt gegeven aan de
+extra pixels, oftewel interpolatie.
+
+Aan de andere kant is het prettig om het proces zo snel mogelijk te
+laten verlopen. Het verwachte eindresultaat is een afbeelding in
+totaal ongeveer 40.000 pixels, die nog goed herkenbaar is als gezicht.
 
 * Methoden
+
+# = interpolatiemethoden, niet schalingsmethoden.
+
 Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritmen, namelijk:
 - Nearest-neighbor interpolation
 - Bilinear interpolation
@@ -54,6 +65,9 @@ interpolatie methode, dit is terug te zien in [bron], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
+
+# eerst reden, daarna keuze
+
 We hebben ervoor gekozen om nearest-neighbor, bilinear en bicubic
 interpolation te implementeren.
 
@@ -112,6 +126,13 @@ implementatie:
 
 # XXX WIP.
 
+* Evaluatie
+
+# Hier iets over kwaliteitschecking - vergelijking met andere methoden
+# door te diffen.
+# en: performance/geheugenbruik?
+
+
 
 # Bronnen:
 # Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
@@ -122,3 +143,5 @@ implementatie:
 # Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
 # Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.320.776&rep=rep1&type=pdf
 # Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
+
+# Bronnen in document verwerken
