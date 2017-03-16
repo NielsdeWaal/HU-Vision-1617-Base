@@ -132,8 +132,6 @@ implementatie:
 # door te diffen.
 # en: performance/geheugenbruik?
 
-
-
 # Bronnen:
 # Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
 # Simpelere vergelijking http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
@@ -141,7 +139,7 @@ implementatie:
 # Crazy overpowerede methode (edge-directed) http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
 # Voor de wikipedia vergelijkingsplaatjes https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
 # Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
-# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.320.776&rep=rep1&type=pdf
+# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?datuoi=10.1.1.320.776&rep=rep1&type=pdf
 # Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
 
 # Bronnen in document verwerken
