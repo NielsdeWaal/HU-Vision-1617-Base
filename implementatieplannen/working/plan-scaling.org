@@ -54,12 +54,12 @@ interpolatie methode, dit is terug te zien in [bron], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
-We hebben ervoor gekozen om nearest-neighbor, bilinear en bicubic
-interpolation te implementeren.
-
-Dit omdat we graag verschillende, veel-gebruikte methoden willen
-vergelijken. Alle hogere orde methoden zijn ook waarschijnlijk te
-ingewikkeld om door ons geïmplementeerd te worden.
+Omdat we graag verschillende, veel-gebruikte methoden willen vergelijken hebben
+en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
+te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
+interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
+haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld zijn. Daarnaast zijn er
+genoeg dingen die we kunnen meten om een goed onderzoek uit te kunnen voeren.
 
 * Implementatie
 Wij implementeren de drie bovengenoemde schalingsmethoden binnen de
