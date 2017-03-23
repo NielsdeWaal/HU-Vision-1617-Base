@@ -65,15 +65,12 @@ interpolatie methode, dit is terug te zien in [bron], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
-
-# eerst reden, daarna keuze
-
-We hebben ervoor gekozen om nearest-neighbor, bilinear en bicubic
-interpolation te implementeren.
-
-Dit omdat we graag verschillende, veel-gebruikte methoden willen
-vergelijken. Alle hogere orde methoden zijn ook waarschijnlijk te
-ingewikkeld om door ons geïmplementeerd te worden.
+Omdat we graag verschillende, veel-gebruikte methoden willen vergelijken hebben
+en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
+te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
+interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
+haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld zijn. Daarnaast zijn er
+genoeg dingen die we kunnen meten om een goed onderzoek uit te kunnen voeren.
 
 * Implementatie
 Wij implementeren de drie bovengenoemde schalingsmethoden binnen de
@@ -136,6 +133,25 @@ implementatie:
 # XXX WIP.
 
 * Evaluatie
+ -
+++We willen graag aantonen dat onze methode eventueel sneller of beter is dan de
+++methode die nu wordt gebruikt voor het schalen.
+++Daarom denken wij dat het nuttig
+++is om de snelheid en de kwaliteit van de verschillende interpolatie methoden met
+++elkaar te vergelijken. Het vergelijken van snelheid spreekt voor zich, maar voor
+++het vergelijken van kwaliteit is er nog een tussenstap nodig. Het makkelijkst is
+++om verschillende methoden te vergelijken door de plaatjes van elkaar af te trekken,
+++hierdoor kun je direct zien wat het verschil tussen plaatjes is. Op basis van
+++het resultaat kun je vervolgens conclusies trekken door te letten op
+++bijvoorbeeld scherpte en het behoud van edges. De kwaliteitsverschillen kunnen
+++ook bepaald worden door te kijken naar de verschillen in uitkomsten van het
+++gehele gezichtsherkenningsproces.
+++
+++We denken dat de bicubic de langzaamste methode is, maar waarschijnlijk wel de
+++beste, al zal er niet heel veel verschil zitten in kwaliteit met bilinear
+++interpolation. Bilinear is sneller en
++ # Hier iets over kwaliteitschecking - vergelijking met andere methoden
++ # door te diffen.
 
 # Hier iets over kwaliteitschecking - vergelijking met andere methoden
 # door te diffen.
