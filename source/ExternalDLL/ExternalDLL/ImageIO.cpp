@@ -53,7 +53,7 @@ std::string ImageIO::getDebugFileName(std::string file){
 		return "";
 	}
 	std::string fullPath = ImageIO::debugFolder;
-	fullPath.append("\\");
+	fullPath.append("/");
 	fullPath.append(file);
 	int index = fullPath.find_last_of("\\/");
 	if (index != -1){
