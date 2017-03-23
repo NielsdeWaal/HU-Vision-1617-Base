@@ -123,6 +123,15 @@ implementatie:
 3. Voor elke (x,y) in de nieuwe afbeelding:
    - Neem ~(X,Y) = (x/scale, y/scale)~ (coördinaten binnen het
      origineel, tussen pixels in).
+3. Voor elke (x,y) in de nieuwe afbeelding:
+   - Neem ~(X,Y) = (x/scale, y/scale)~ (coördinaten binnen het
+     origineel, tussen pixels in).
+   - Neem ~(X1,X2,Y1,Y2) = (floor(X), ceil(X), floor(Y), ceil(Y))~, de
+     coördinaten van de dichtsbijzijnde 4 pixels in het origineel.
+   - Interpoleer kubisch horizontaal punt (X,Y1) tussen (X1,Y1) en (X2,Y1)[fn:1]
+   - Interpoleer kubisch horizontaal punt (X,Y2) tussen (X1,Y2) en (X2,Y2)
+   - Interpoleer kubisch verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
+   - ~(x,y) = (X,Y)~
 
 # XXX WIP.
 
@@ -143,3 +152,12 @@ implementatie:
 # Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
 
 # Bronnen in document verwerken
+
+* Footnotes
+
+[fn:1] Gebruik hiervoor de formule \begin{math} f(p_0,p_1,p_2,p_3,x) =
+(-\tfrac{1}{2}p_0 + \tfrac{3}{2}p_1 - \tfrac{3}{2}p_2 +
+\tfrac{1}{2}p_3)x^3 + (p_0 - \tfrac{5}{2}p_1 + 2p_2 -
+\tfrac{1}{2}p_3)x^2 + (-\tfrac{1}{2}p_0 + \tfrac{1}{2}p_2)x + p_1
+\end{math}, waar ~p[0-3]~ de 4 waarden rondom x zijn.
+
