@@ -65,7 +65,7 @@ interpolatie methode, dit is terug te zien in [bron], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
-Omdat we graag verschillende, veel-gebruikte methoden willen vergelijken hebben
+Omdat we graag verschillende, veelgebruikte methoden willen vergelijken hebben
 en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
 te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
 interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
@@ -84,6 +84,9 @@ Deze functie zal een grijswaardenafbeelding moeten schalen zodat deze,
 zonder de verhoudingen te veranderen, het dichtst bij 40.000 pixels in
 de buurt komt. Bronafbeeldingen die kleiner zijn dan 40.000 pixels
 worden onveranderd geretourneerd.
+
+Gezien de berekening van elke nieuwe pixel onafhankelijk van andere
+nieuwe pixels is, kunnen we het schalen parallelliseren.
 
 Hieronder volgt per methode een korte beschrijving van de
 implementatie:
@@ -148,9 +151,14 @@ edges. De kwaliteitsverschillen kunnen ook bepaald worden door te
 kijken naar de verschillen in uitkomsten van het gehele
 gezichtsherkenningsproces.
 
+De huidige implementatie van interpolatie is bilinear en
+singlethreaded. Wij verwachten dat onze implementatie van bilineare
+interpolatie sneller zal zijn omdat wij deze parallel gaan uitvoeren.
+
 We denken dat de bicubic de langzaamste methode is, maar
 waarschijnlijk wel de beste, al zal er niet heel veel verschil zitten
 in kwaliteit met bilinear interpolation. Bilinear is sneller en
+# ?
 
 
 # Hier iets over kwaliteitschecking - vergelijking met andere methoden
