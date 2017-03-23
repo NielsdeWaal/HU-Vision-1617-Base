@@ -188,3 +188,5 @@ in kwaliteit met bilinear interpolation. Bilinear is sneller en
 \tfrac{1}{2}p_3)x^2 + (-\tfrac{1}{2}p_0 + \tfrac{1}{2}p_2)x + p_1
 \end{math}, waar ~p[0-3]~ de 4 waarden rondom x zijn.
 
+
+# http://www.paulinternet.nl/?page=bicubic

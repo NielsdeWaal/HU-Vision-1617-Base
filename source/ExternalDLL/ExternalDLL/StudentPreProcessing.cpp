@@ -13,7 +13,7 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 
 std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_t desiredPixelCount = 40000) {
     
-    auto scale = sqrt(40000 / ((double)image.getWidth() * (double)image.getHeight()));
+    double scale = sqrt(40000 / ((double)image.getWidth() * (double)image.getHeight()));
 
     return std::make_tuple(scale*image.getWidth(), scale*image.getHeight(), scale);
 }
@@ -39,9 +39,11 @@ IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
 }
 
 IntensityImage * StudentPreProcessing::stepScaleImage(const IntensityImage &image) const {
-    // WIP.
 
-    return scaleNearestNeighbor(image);
+    if (image.getWidth() * image.getHeight() > 40000)
+        return scaleNearestNeighbor(image);
+    else
+        return ImageFactory::newIntensityImage(image);
 
     // DefaultPreProcessing bla;
     // return bla.stepScaleImage(image);
