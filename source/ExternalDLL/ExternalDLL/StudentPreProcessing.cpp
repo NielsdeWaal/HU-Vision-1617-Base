@@ -18,7 +18,7 @@ std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_
     return std::make_tuple(scale*image.getWidth(), scale*image.getHeight(), scale);
 }
 
-IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
+static IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
 
     auto dim = getNewDimensions(image);
 	IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
@@ -40,6 +40,49 @@ IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
     return out;
 }
 
+#include <thread>
+#include <vector>
+
+static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image) {
+
+    auto dim = getNewDimensions(image);
+    const double origScale = 1 / std::get<2>(dim);
+
+	IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
+
+    auto cores = std::thread::hardware_concurrency();
+    if (!cores)
+        cores = 2;
+    std::cerr << "got " << cores << " threads\n";
+
+    size_t rowsPerThread = std::get<1>(dim) / cores;
+
+    std::vector<std::thread> pool;
+
+    for (size_t i = 0; i < cores; i++) {
+        pool.emplace_back([&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
+                // We assume the default image implementation is thread-safe.
+    
+                for (uint y = rowStart; y < rowStart + rowCount; ++y) {
+
+                    uint origY = round(origScale * y);
+
+                    for (uint x = 0; x < std::get<0>(dim); ++x) {
+                        uint origX = round(origScale * x);
+                        out->setPixel(x, y, image.getPixel(origX, origY));
+                    }
+                }
+
+            }, i * rowsPerThread,
+            rowsPerThread + (i == cores-1 ? std::get<1>(dim) % rowsPerThread : 0));
+    }
+
+    for (auto &t : pool)
+        t.join();
+
+    return out;
+}
+
 #include <chrono>
 
 IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image) const {
@@ -48,25 +91,26 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
 
     IntensityImage *ret = nullptr;
 
-    using Clock = std::chrono::steady_clock;
-    auto start  = Clock::now();
+    std::unique_ptr<DefaultPreProcessing> bla;
 
     // Switching here so we can measure the performance of the default
     // implementation as well.
     constexpr bool USE_STUDENT_SCALING = true;
 
+    if (!USE_STUDENT_SCALING)
+        bla = std::make_unique<DefaultPreProcessing>();
+
+    using Clock = std::chrono::steady_clock;
+    auto start  = Clock::now();
+
     if (USE_STUDENT_SCALING) {
         if (image.getWidth() * image.getHeight() > 40000)
-            ret = scaleNearestNeighbor(image);
+            ret = scaleNearestNeighborMt(image);
         else
             ret = ImageFactory::newIntensityImage(image);
     } else {
-        DefaultPreProcessing bla;
-        ret = bla.stepScaleImage(image);
+        ret = bla->stepScaleImage(image);
     }
-
-    // DefaultPreProcessing bla;
-    // return bla.stepScaleImage(image);
 
     auto end = Clock::now();
 
@@ -75,14 +119,6 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
     std::cout << "Duration: " << ((double)duration.count() * (scale * 1000)) << "ms\n";
 
     return ret;
-
-    // if (image.getWidth() * image.getHeight() > 40000)
-    //     return scaleNearestNeighbor(image);
-    // else
-    //     return ImageFactory::newIntensityImage(image);
-
-    // DefaultPreProcessing bla;
-    // return bla.stepScaleImage(image);
 }
 
 IntensityImage * StudentPreProcessing::stepEdgeDetection(const IntensityImage &image) const {
