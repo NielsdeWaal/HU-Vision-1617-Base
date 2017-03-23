@@ -30,12 +30,12 @@ DLLExecution::~DLLExecution() {
 
 	//InputImage is not delete here because it should be deleted by the creator of the image
 
-	delete resultPreProcessingStep1;
-	delete resultPreProcessingStep2;
-	delete resultPreProcessingStep3;
-	delete resultPreProcessingStep4;
-	delete localizationDebug;
-	delete extractionDebug;
+	// delete resultPreProcessingStep1;
+	// delete resultPreProcessingStep2;
+	// delete resultPreProcessingStep3;
+	// delete resultPreProcessingStep4;
+	// delete localizationDebug;
+	// delete extractionDebug;
 }
 
 
@@ -79,7 +79,7 @@ bool DLLExecution::prepareExtraction() {
 	}
 
 	//Create debug image
-	delete extractionDebug;
+	// delete extractionDebug;
 	extractionDebug = ImageFactory::newRGBImage(resultPreProcessingStep1->getWidth(), resultPreProcessingStep1->getHeight());
 	ImageIO::intensityToRGB(*resultPreProcessingStep1, *extractionDebug);
 
@@ -192,7 +192,7 @@ bool DLLExecution::prepareLocalization() {
 	if (!resultPreProcessingStep4) {
 		return false;
 	}
-	delete localizationDebug;
+	// delete localizationDebug;
 	localizationDebug = ImageFactory::newRGBImage(resultPreProcessingStep4->getWidth(), resultPreProcessingStep4->getHeight());
 	ImageIO::intensityToRGB(*resultPreProcessingStep4, *localizationDebug);
 	hasPreparedLocalization = true;
