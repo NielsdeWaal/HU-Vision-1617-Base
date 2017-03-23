@@ -21,7 +21,7 @@ int main(int argc, char * argv[]) {
         inPath = argv[1];
 
 	ImageFactory::setImplementation(*ImageFactory::DEFAULT);
-	//ImageFactory::setImplementation(*ImageFactory::STUDENT);
+	// ImageFactory::setImplementation(*ImageFactory::STUDENT);
 
 
 	ImageIO::debugFolder = ".";
@@ -69,7 +69,7 @@ bool executeSteps(DLLExecution * executor) {
 		return false;
 	}
 
-	if (!executor->executePreProcessingStep2(false)) {
+	if (!executor->executePreProcessingStep2(true)) {
 		std::cout << "Pre-processing step 2 failed!" << std::endl;
 		return false;
 	}
