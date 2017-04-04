@@ -1,0 +1,89 @@
+% Created 2017-04-04 Tue 16:30
+% Intended LaTeX compiler: pdflatex
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=3.0cm]{geometry}
+\usepackage[section]{placeins}
+\author{Chris Smeele (1681546), Philippe Zwietering (1685431)}
+\date{04-04-2017}
+\title{Meetrapport snelheid bilineaire interpolatie bij schaling afbeeldingen}
+\hypersetup{
+ pdfauthor={Chris Smeele (1681546), Philippe Zwietering (1685431)},
+ pdftitle={Meetrapport snelheid bilineaire interpolatie bij schaling afbeeldingen},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 24.5.1 (Org mode 9.0.5)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+\section{Doel}
+\label{sec:orgce2d2ac}
+We willen in dit onderzoek kijken wat het verschil is in snelheid van twee verschillende implementaties van bilineaire interpolatie om afbeeldingen te schalen. Hierbij willen we graag het verschil bekijken tussen onze eigen implementatie en de implementatie die al wordt gebruikt in de bestaande implementatie van dit project, die gebruik maakt van de OpenCV library. Het verschil in snelheid kan gemakkelijk gemeten worden door het verschil in tijd te meten tussen het begin en einde van de schalingsstap in beide implementaties.
+
+\subsection{Hypothese}
+\label{sec:org56664ab}
+Wij denken dat onze eigen implementatie sneller zal zijn omdat deze multi-threading toepast, waardoor er meerdere rijen tegelijkertijd kunnen worden geschaald.
+
+\section{Werkwijze}
+\label{sec:org036ab5d}
+Onze code voor de bilineaire interpolatie en het schalen staan in appendix \ref{sec:orgee3a7f5}.
+
+Voor het verschil in snelheid tussen de twee algoritmes is gekeken naar de gemiddelde tijdsduur voor een test afbeelding om te worden geschaald. We hebben de volgende testafbeelding bekeken, deze afbeelding geeft voor beide algoritmen een succesvolle gezichtsherkenning: 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=194px]{../../testsets/Set A/TestSet Images/male-1.png}
+\caption{\label{fig:orgb83015a}
+Onbwerkte testafbeelding}
+\end{figure}
+
+Om het tijdsverschil tussen het begin en einde van de schalingsstap te bepalen is gebruik gemaakt van de chrono namespace van de standaard library van c++ 2014. Aan het begin en einde van de schalingsstap wordt gekeken wat de tijd is met de \texttt{now()} methode op een \texttt{std::chrono::steady\_clock} en het verschil hiertussen wordt uitgeprint op het scherm in milliseconden, met 6 cijfers achter de komma.
+
+\section{Resultaten}
+\label{sec:org0e00a90}
+We hebben beide implementaties meerdere keren gedraaid op Chris zijn laptop. Hieruit krijgen we de volgende resultaten, tabel \ref{tab:org4c92527}. De significantie van dit resultaat is platform afhankelijk en daarom zal de nauwkeurigheid per systeem afwijken. We gebruiken echter de \texttt{steady\_clock}, en zoals te zien is in de c++-manual is deze specifiek bedoeld voor het meten van tijdsintervallen. We gaan er daarom vanuit dat de nauwkeurigheid minstens goed genoeg is om het verschil in microsecondes goed te kunnen onderscheiden. Dit betekent dat alleen de eerste drie cijfers achter de komma betekenis hebben en dat we de rest weg kunnen gooien. We controleren at compile time dat de resolutie van de tijdmeting nauwkeurig genoeg is, met behulp van een \texttt{static\_assert}. Dan krijgen we:
+
+\begin{table}[htbp]
+\caption{\label{tab:org4c92527}
+Tijdsduur verschillende implementaties}
+\centering
+\begin{tabular}{lll}
+ & OpenCV algoritme & Eigen algoritme\\
+Nummer & Tijdsduur (ms) & Tijdsduur (ms)\\
+\hline
+ &  & \\
+\end{tabular}
+\end{table}
+
+\section{Verwerking}
+\label{sec:org202cecd}
+
+\section{Conclusie}
+\label{sec:org0b254af}
+
+\section{Evaluatie}
+\label{sec:org2790bd1}
+
+\section{Appendix}
+\label{sec:orgee74037}
+\subsection{Code bilineaire schaling}
+\label{sec:orgee3a7f5}
+\texttt{Hier komt code}
+\end{document}
