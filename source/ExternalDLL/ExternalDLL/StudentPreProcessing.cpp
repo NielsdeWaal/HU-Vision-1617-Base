@@ -197,16 +197,13 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
         auto dim = getNewDimensions(image);
         IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
 
-        // double testpuntjes[4][4] = {{80, 30, 50, 20}, {10, 40, 70, 20}, {10, 2, 50, 30}, {0, 20, 80, 30}};
-        // std::cout << "Testbicubic: " << bicubicInterpolate(testpuntjes, 0.1, 0.1) << std::endl;
-        // std::cout << "Testcubic: " << cubicInterpolate(testpuntjes[0], 0.1) << std::endl;
-
-        if (image.getWidth() * image.getHeight() > 40000)
+        if (image.getWidth() * image.getHeight() > 40000) {
             ret = scaleBicubic(image, dim, out);
             // ret = scaleNearestNeighborMt(image, dim, out);
-            //ret = scaleBilinearMt(image, dim, out);
-        else
+            // ret = scaleBilinearMt(image, dim, out);
+        } else {
             ret = ImageFactory::newIntensityImage(image);
+        }
     } else {
         ret = bla->stepScaleImage(image);
     }
@@ -215,6 +212,11 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
 
     auto duration = end - start;
     double scale = (double)Clock::period::num / Clock::period::den;
+
+    // Verify that the clock period is short enough. We require 1µs precision.
+    static_assert(Clock::period::num == 1 && Clock::period::den >= std::micro::den,
+                  "Clock resolution too low for accurate performance testing");
+
     std::cout << "Duration: " << ((double)duration.count() * (scale * 1000)) << "ms\n";
 
     return ret;
