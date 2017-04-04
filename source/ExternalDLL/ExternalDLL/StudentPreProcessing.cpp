@@ -129,21 +129,21 @@ static IntensityImage *scaleBilinearMt(const IntensityImage &image,
     return out;
 }
 
-constexpr double cubicInterpolate(const double p[4], const double x){
+double cubicInterpolate(const double p[4], double x){
     return p[1] + 0.5 * x * (p[2] - p[0] + x * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + x * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
 }
 
-double bicubicInterpolate(const double p[4][4], const double x, const double y){
+double bicubicInterpolate(const double p[4][4], double x, double y){
     double h[4];
-    for(uint8_t i = 0; i < 4; ++i){
+    for(int i = 0; i < 4; ++i){
         h[i] = cubicInterpolate(p[i], y);
     }
     return cubicInterpolate(h, x);
 }
 
 static IntensityImage *scaleBicubic(const IntensityImage &image,
-                                              std::tuple<unsigned,unsigned,double> dim,
-                                              IntensityImage *out) {
+                                    std::tuple<unsigned,unsigned,double> dim,
+                                    IntensityImage *out) {
 
     const double origScale = 1 / std::get<2>(dim);
 
@@ -164,7 +164,8 @@ static IntensityImage *scaleBicubic(const IntensityImage &image,
                         }
                     }
 
-                    out->setPixel(x, y, bicubicInterpolate(p, origX-floor(origX), origY-floor(origY)));
+                    // NB: Here we assume that the type of Intensity is an unsigned char.
+                    out->setPixel(x, y, std::max(0, std::min(255, (int)bicubicInterpolate(p, origX-(long)origX, origY-(long)origY))));
                 }
             }
         });
@@ -196,17 +197,13 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
         auto dim = getNewDimensions(image);
         IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
 
-        // Intensity testpuntjes[4][4] = {{0, 30, 50, 20}, {10, 40, 70, 20}, {10, 2, 50, 30}, {0, 20, 80, 30}};
-        // std::cout << "Testbicubic: " << bicubicInterpolate(testpuntjes, 0.1, 0.1) << std::endl;
-        // std::cout << "Testcubic: " << cubicInterpolate(testpuntjes[0], 0.1) << std::endl;
-
-
-        if (image.getWidth() * image.getHeight() > 40000)
+        if (image.getWidth() * image.getHeight() > 40000) {
             ret = scaleBicubic(image, dim, out);
             // ret = scaleNearestNeighborMt(image, dim, out);
-            //ret = scaleBilinearMt(image, dim, out);
-        else
+            // ret = scaleBilinearMt(image, dim, out);
+        } else {
             ret = ImageFactory::newIntensityImage(image);
+        }
     } else {
         ret = bla->stepScaleImage(image);
     }
@@ -215,6 +212,11 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
 
     auto duration = end - start;
     double scale = (double)Clock::period::num / Clock::period::den;
+
+    // Verify that the clock period is short enough. We require 1µs precision.
+    static_assert(Clock::period::num == 1 && Clock::period::den >= std::micro::den,
+                  "Clock resolution too low for accurate performance testing");
+
     std::cout << "Duration: " << ((double)duration.count() * (scale * 1000)) << "ms\n";
 
     return ret;
