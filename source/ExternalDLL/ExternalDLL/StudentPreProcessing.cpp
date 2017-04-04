@@ -43,42 +43,48 @@ static IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
 #include <thread>
 #include <vector>
 
-static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image) {
-
-    auto dim = getNewDimensions(image);
-    const double origScale = 1 / std::get<2>(dim);
-
-	IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
-
+template<class F, class ...Args>
+static void draadificeer(unsigned jobs, F fun, Args ...args) {
     auto cores = std::thread::hardware_concurrency();
     if (!cores)
         cores = 2;
     std::cerr << "got " << cores << " threads\n";
 
-    size_t rowsPerThread = std::get<1>(dim) / cores;
+    size_t jobsPerThread = jobs / cores;
 
     std::vector<std::thread> pool;
 
     for (size_t i = 0; i < cores; i++) {
-        pool.emplace_back([&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
-                // We assume the default image implementation is thread-safe.
-    
-                for (uint y = rowStart; y < rowStart + rowCount; ++y) {
-
-                    uint origY = round(origScale * y);
-
-                    for (uint x = 0; x < std::get<0>(dim); ++x) {
-                        uint origX = round(origScale * x);
-                        out->setPixel(x, y, image.getPixel(origX, origY));
-                    }
-                }
-
-            }, i * rowsPerThread,
-            rowsPerThread + (i == cores-1 ? std::get<1>(dim) % rowsPerThread : 0));
+        // i * jobsPerThread,
+        //     jobsPerThread + (i == cores-1 ? std::get<1>(dim) % jobsPerThread : 0))
+        pool.emplace_back(std::bind(fun,
+                                    i * jobsPerThread,
+                                    jobsPerThread + (i == cores-1 ? jobs % jobsPerThread : 0),
+                                    args...));
     }
 
     for (auto &t : pool)
         t.join();
+}
+
+static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image,
+                                              std::tuple<unsigned,unsigned,double> dim,
+                                              IntensityImage *out) {
+
+    const double origScale = 1 / std::get<2>(dim);
+
+
+    draadificeer(std::get<1>(dim), [&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
+            for (uint y = rowStart; y < rowStart + rowCount; ++y) {
+
+                uint origY = round(origScale * y);
+
+                for (uint x = 0; x < std::get<0>(dim); ++x) {
+                    uint origX = round(origScale * x);
+                    out->setPixel(x, y, image.getPixel(origX, origY));
+                }
+            }
+        });
 
     return out;
 }
@@ -140,8 +146,11 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
     auto start  = Clock::now();
 
     if (USE_STUDENT_SCALING) {
+        auto dim = getNewDimensions(image);
+        IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
+
         if (image.getWidth() * image.getHeight() > 40000)
-            ret = scaleNearestNeighborMt(image);
+            ret = scaleNearestNeighborMt(image, dim, out);
         else
             ret = ImageFactory::newIntensityImage(image);
     } else {
