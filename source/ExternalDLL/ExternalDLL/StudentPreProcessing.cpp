@@ -83,6 +83,42 @@ static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image) {
     return out;
 }
 
+static IntensityImage *scaleBicubic(const IntensityImage &image){
+  auto dim = getNewDimensions(image);
+  const double origScale = 1 / std::get<2>(dim);
+
+  IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
+
+  auto cores = std::thread::hardware_concurrency();
+  if(!cores){
+    cores = 2;
+  }
+  std::cerr << "got " << cores << " threads\n";
+
+  size_t rowsPerThread = std::get<1>(dim) / cores;
+
+  std::vector<std::thread> pool;
+
+  for(size_t i = 0; i < cores; ++i){
+    pool.emplace_back([&image, &dim, origScale, out](size_t rowStart, size_t rowCount){
+        for(uint y = rowStart + 2; y < rowStart + rowCount - 2; ++y){
+
+          uint origY = round(origScale * y);
+          for(uint x = 2; x < std::get<0>(dim) - 2; ++x){
+            uint origX = round(origScale * x);
+            out->setPixel()
+          }
+        }
+      }, i * rowsPerThread,rowsPerThread + (i == cores-1 ? std::get<1>(dim) % rowsPerThread : 0));
+
+  }
+  for(auto &t : pool)
+    t.join():
+
+  return out;
+
+}
+
 #include <chrono>
 
 IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image) const {
