@@ -7,39 +7,6 @@
 
 #include <iostream>
 
-IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
-    return nullptr;
-}
-
-std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_t desiredPixelCount = 40000) {
-    
-    double scale = sqrt(40000 / ((double)image.getWidth() * (double)image.getHeight()));
-
-    return std::make_tuple(scale*image.getWidth(), scale*image.getHeight(), scale);
-}
-
-static IntensityImage *scaleNearestNeighbor(const IntensityImage &image) {
-
-    auto dim = getNewDimensions(image);
-	IntensityImage *out = ImageFactory::newIntensityImage(std::get<0>(dim), std::get<1>(dim));
-
-    // Size of other image relative to ours.
-    double origScale = 1 / std::get<2>(dim);
-    
-    for (uint y = 0; y < std::get<1>(dim); ++y) {
-
-        uint origY = round(origScale * y);
-
-        for (uint x = 0; x < std::get<0>(dim); ++x) {
-            uint origX = round(origScale * x);
-            out->setPixel(x, y, image.getPixel(origX, origY));
-            //std::cout << "orig: (" << origX << "," << origY << ") << " << origScale << "\n";
-        }
-    }
-    
-    return out;
-}
-
 #include <thread>
 #include <vector>
 
@@ -67,12 +34,44 @@ static void draadificeer(unsigned jobs, F fun, Args ...args) {
         t.join();
 }
 
+
+IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
+    return nullptr;
+}
+
+std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_t desiredPixelCount = 40000) {
+    
+    double scale = sqrt(40000 / ((double)image.getWidth() * (double)image.getHeight()));
+
+    return std::make_tuple(scale*image.getWidth(), scale*image.getHeight(), scale);
+}
+
+static IntensityImage *scaleNearestNeighbor(const IntensityImage &image,
+                                            std::tuple<unsigned,unsigned,double> dim,
+                                            IntensityImage *out) {
+
+    // Size of other image relative to ours.
+    double origScale = 1 / std::get<2>(dim);
+    
+    for (uint y = 0; y < std::get<1>(dim); ++y) {
+
+        uint origY = round(origScale * y);
+
+        for (uint x = 0; x < std::get<0>(dim); ++x) {
+            uint origX = round(origScale * x);
+            out->setPixel(x, y, image.getPixel(origX, origY));
+            //std::cout << "orig: (" << origX << "," << origY << ") << " << origScale << "\n";
+        }
+    }
+    
+    return out;
+}
+
 static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image,
                                               std::tuple<unsigned,unsigned,double> dim,
                                               IntensityImage *out) {
 
     const double origScale = 1 / std::get<2>(dim);
-
 
     draadificeer(std::get<1>(dim), [&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
             for (uint y = rowStart; y < rowStart + rowCount; ++y) {
@@ -82,6 +81,47 @@ static IntensityImage *scaleNearestNeighborMt(const IntensityImage &image,
                 for (uint x = 0; x < std::get<0>(dim); ++x) {
                     uint origX = round(origScale * x);
                     out->setPixel(x, y, image.getPixel(origX, origY));
+                }
+            }
+        });
+
+    return out;
+}
+
+static IntensityImage *scaleBilinearMt(const IntensityImage &image,
+                                       std::tuple<unsigned,unsigned,double> dim,
+                                       IntensityImage *out) {
+
+    const double origScale = 1 / std::get<2>(dim);
+
+    draadificeer(std::get<1>(dim), [&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
+
+            for (uint y = rowStart; y < rowStart + rowCount; ++y) {
+
+                double origY = origScale * y;
+                unsigned y1  = floor(origY);
+                unsigned y2  =  ceil(origY);
+
+                double yFrac = origY - (long)origY;
+
+                for (uint x = 0; x < std::get<0>(dim); ++x) {
+                    double origX = origScale * x;
+                    unsigned x1  = floor(origX);
+                    unsigned x2  =  ceil(origX);
+
+                    double xFrac = origX - (long)origX;
+
+                    auto px1y1 = image.getPixel(x1, y1);
+                    auto px1y2 = image.getPixel(x1, y2);
+                    auto px2y1 = image.getPixel(x2, y1);
+                    auto px2y2 = image.getPixel(x2, y2);
+
+                    auto h1 = px1y1 + xFrac * (px2y1 - px1y1);
+                    auto h2 = px1y2 + xFrac * (px2y2 - px1y2);
+
+                    auto v = h1 + yFrac * (h2 - h1);
+
+                    out->setPixel(x, y, v);
                 }
             }
         });
@@ -163,6 +203,8 @@ IntensityImage *StudentPreProcessing::stepScaleImage(const IntensityImage &image
 
         if (image.getWidth() * image.getHeight() > 40000)
             ret = scaleBicubic(image, dim, out);
+            // ret = scaleNearestNeighborMt(image, dim, out);
+            //ret = scaleBilinearMt(image, dim, out);
         else
             ret = ImageFactory::newIntensityImage(image);
     } else {
