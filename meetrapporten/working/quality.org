@@ -1,0 +1,73 @@
+#+PROPERTY: header-args :padline no
+#+OPTIONS: toc:2 tags:nil
+#+LATEX_HEADER: \usepackage[margin=3.0cm]{geometry}
+#+LATEX_HEADER: \usepackage[section]{placeins}
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_CLASS: article
+#+TITLE: Meetrapport scaling kwaliteit
+#+AUTHOR: Chris Smeele (1681546), Philippe Zwietering (1685431)
+#+DATE: 04-04-2017
+
+* Doel
+Met dit experiment willen wij aantonen of onze implementatie van
+bikubische interpolatie bij schaling een hogere kwaliteit plaatje
+oplevert in vergelijking tot de bestaande, lineair interpolerende
+implementatie.
+* Hypothese
+Wij verwachten dat onze implementatie resulteert in een hogere
+kwaliteit dan bereikt kan worden met de lineair interpolerende versie.
+
+# TODO: Stukje over waarom Kubisch ftw.
+* Werkwijze
+Om de kwaliteit van de interpolatiemethoden te testen vergelijken we
+de resultaten van het gehele gezichtsherkenningproces. Wanneer het
+gebruik van een interpolatiemethode ten opzichte van een andere
+methode tot meer succesvolle herkenningen leidt, beschouwen wij dit
+als een hogere kwaliteit resultaat.
+
+Vanuit de cursus Vision van de HU zijn ons 7 plaatjes aangeleverd om
+mee te testen (zie Appendix). Wij voeren elk plaatje als invoer aan
+het gezichtsherkenningsprogramma, één keer met de bestaande
+interpolatiemethode, en één keer met ons algoritme ingeschakeld.
+* Resultaten
+Ons experiment gaf de volgende resultaten.
+
+| Foto         | Herkenning Bilineair | Herkenning Kubisch |
+|--------------+----------------------+--------------------|
+| child-1.png  | Ja                   | Ja                 |
+| female-1.png | Nee                  | Nee                |
+| female-2.png | Ja                   | Ja                 |
+| female-3.png | Ja                   | Ja                 |
+| male-1.png   | Ja                   | Ja                 |
+| male-2.png   | Nee                  | Nee                |
+| male-3.png   | Ja                   | Ja                 |
+* TODO Verwerking
+# Laat zien hoe je de meetresultaten verwerkt om een conclusie te kunnen
+# trekken. Het is niet nodig om alle berekeningen op te schrijven, als
+# je bijvoorbeeld maar laat zien welke formule(s) je gebruikt voor het
+# verwerken van de meetresultaten en daar zo nodig één
+# voorbeeldberekening aan toevoegt.
+* TODO Conclusie
+# Geef aan welke conclusie kan worden getrokken uit de verwerking van de
+# meetresultaten.
+* TODO Evaluatie
+# Leg een verband tussen de getrokken conclusie en het doel van het
+# experiment (en de hypothese). Ga daarbij ook in op bijvoorbeeld de
+# meetonzekerheid als gevolg van de gebruikte meetmethoden of eventuele
+# meetfouten.
+* Appendix
+** Gebruikte testplaatjes
+Wij hebben de volgende plaatjes gebruikt bij dit experiment:
+[[../../testsets/Set A/TestSet Images/child-1.png]]
+
+[[../../testsets/Set A/TestSet Images/female-1.png]]
+
+[[../../testsets/Set A/TestSet Images/female-2.png]]
+
+[[../../testsets/Set A/TestSet Images/female-3.png]]
+
+[[../../testsets/Set A/TestSet Images/male-1.png]]
+
+[[../../testsets/Set A/TestSet Images/male-2.png]]
+
+[[../../testsets/Set A/TestSet Images/male-3.png]]
