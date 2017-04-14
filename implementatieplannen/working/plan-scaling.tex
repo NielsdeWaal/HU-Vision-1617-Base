@@ -1,4 +1,4 @@
-% Created 2017-04-15 Sat 00:08
+% Created 2017-04-15 Sat 00:14
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -34,7 +34,7 @@
 
 
 \section{Doel}
-\label{sec:org3699482}
+\label{sec:org1cd7778}
 Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht
 gekregen om een stap uit een gezichtsherkenningsproces te herschrijven
 met onze eigen code. Wij hebben hier gekozen voor het schalen van
@@ -57,9 +57,10 @@ laten verlopen. Het verwachte eindresultaat is een afbeelding in
 totaal ongeveer 40.000 pixels, die nog goed herkenbaar is als gezicht.
 
 \section{Methoden}
-\label{sec:org920bb43}
+\label{sec:org0b4b1ab}
 
 Voor het schalen van afbeeldingen kun je backwards-mapping goed gebruiken, waarbij je vervolgens moet interpoleren om de beste pixelwaarden terug te krijgen. Een aantal bekende interpolatiemethoden zijn:
+
 \begin{itemize}
 \item Nearest-neighbor interpolation
 \item Bilinear interpolation
@@ -71,18 +72,20 @@ Voor het schalen van afbeeldingen kun je backwards-mapping goed gebruiken, waarb
 Dit lijstje staat al op volgorde van moeilijkheidsgraad en benodigde
 rekenkracht. Nearest-neighbor interpolation is duidelijk het simpelst,
 terwijl er in edge-directed interpolation recent nog nieuwe
-vooruitgangen zijn geboekt. \footnote{\url{https://www.academia.edu/3636528/Comparative\_Analysis\_of\_Different\_Interpolation\_Schemes\_in\_Image\_Processing}}\textsuperscript{,}\,\footnote{\url{http://s3.amazonaws.com/academia.edu.documents/38411794/image\_scaling\_comp\_using\_quality\_index\_int\_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A\&Expires=1487856758\&Signature=0a0LAmigralkaS29EuBjeJY5f\%2FQ\%3D\&response-content-disposition=inline\%3B\%20filename\%3DIMAGE\_SCALING\_COMPARISON\_USING\_UNIVERSAL.pdf}}\textsuperscript{,}\,\footnote{\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358\&rep=rep1\&type=pdf}\label{org36c7428}}
+vooruitgangen zijn geboekt. \footnote{\url{https://www.academia.edu/3636528/Comparative\_Analysis\_of\_Different\_Interpolation\_Schemes\_in\_Image\_Processing}}\textsuperscript{,}\,\footnote{\url{http://s3.amazonaws.com/academia.edu.documents/38411794/image\_scaling\_comp\_using\_quality\_index\_int\_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A\&Expires=1487856758\&Signature=0a0LAmigralkaS29EuBjeJY5f\%2FQ\%3D\&response-content-disposition=inline\%3B\%20filename\%3DIMAGE\_SCALING\_COMPARISON\_USING\_UNIVERSAL.pdf}}\textsuperscript{,}\,\footnote{\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358\&rep=rep1\&type=pdf}\label{org9a221fd}}
 
 Nearest-neighbor tot box-sampling staan ook op omgekeerde volgorde van
 nauwkeurigheid.
 
 Bicubic interpolation heeft alleen wel het nadeel ten opzichte van
 bilinear interpolation dat het overbelichting kan veroorzaken, maar
-heeft wel een groter detailbehoud dan bilinear interpolation.\textsuperscript{\ref{org36c7428}}
+heeft wel een groter detailbehoud dan bilinear interpolation.\textsuperscript{\ref{org9a221fd}}
+
 
 Box-sampling heeft dit probleem niet en is nauwkeuriger
 dan bicubic interpolation, maar is aanzienlijk moeilijker te
 implementeren.\footnote{\url{https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content\_uploads/Vorlesung\_3.4\_Resampling.pdf}}
+
 Box-sampling en bicubic interpolation hebben wel dezelfde benodigde
 rekenkracht.
 
@@ -91,16 +94,18 @@ interpolatie methode, dit is terug te zien in \footnote{\url{https://en.wikipedi
 vooral op het behouden van edges in het schalingsproces.
 
 \section{Keuze}
-\label{sec:orgeff1d0a}
-Omdat we graag verschillende, veelgebruikte methoden willen vergelijken hebben
-en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
-te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
-interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
-haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld zijn. Daarnaast zijn er
-genoeg dingen die we kunnen meten om een goed onderzoek uit te kunnen voeren.
+\label{sec:org7976538}
+Omdat we graag verschillende, veelgebruikte methoden willen
+vergelijken hebben en de hogere orden methoden waarschijnlijk te
+moeilijk zijn om door ons geïmplementeerd te worden, hebben wij er
+voor gekozen om nearest-neighbor, bilinear en bicubic interpolation te
+gebruiken om te schalen. We denken dat deze drie methoden zeer
+haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld
+zijn. Daarnaast zijn er genoeg dingen die we kunnen meten om een goed
+onderzoek uit te kunnen voeren.
 
 \section{Implementatie}
-\label{sec:orgfe48506}
+\label{sec:org69b9377}
 Wij implementeren de drie bovengenoemde schalingsmethoden binnen de
 bestaande HU-Vision repository.
 
@@ -120,7 +125,7 @@ Hieronder volgt per methode een korte beschrijving van de
 implementatie\footnote{\url{http://pippin.gimp.org/image\_processing/chap\_resampling.html}}:
 
 \subsection{Nearest-neighbor}
-\label{sec:orgba4310f}
+\label{sec:org6cbe652}
 \begin{enumerate}
 \item Bereken de nieuwe afmetingen:
 \begin{itemize}
@@ -137,7 +142,7 @@ implementatie\footnote{\url{http://pippin.gimp.org/image\_processing/chap\_resam
 \end{enumerate}
 
 \subsection{Bilinear}
-\label{sec:orgb18fa54}
+\label{sec:org31de6c6}
 \begin{enumerate}
 \item Bereken de nieuwe afmetingen:
 \begin{itemize}
@@ -159,7 +164,7 @@ coördinaten van de dichtsbijzijnde 4 pixels in het origineel.
 \end{enumerate}
 
 \subsection{Bicubic}
-\label{sec:org7fe255f}
+\label{sec:orgdf4d852}
 \begin{enumerate}
 \item Bereken de nieuwe afmetingen:
 \begin{itemize}
@@ -191,7 +196,7 @@ coördinaten van de dichtsbijzijnde 4 pixels in het origineel.
 
 
 \section{Evaluatie}
-\label{sec:org0ec2fbd}
+\label{sec:org51255b1}
 We willen graag aantonen dat onze methode sneller of beter
 is dan de methode die nu wordt gebruikt voor het schalen.
 
@@ -213,5 +218,18 @@ interpolatie sneller zal zijn omdat wij deze parallel gaan uitvoeren.
 
 We denken dat de bicubic de langzaamste methode is, maar
 waarschijnlijk wel de beste, al zal er niet heel veel verschil zitten
-in kwaliteit met bilinear interpolation. Bilinear is sneller en gebruikt minder geheugen, dus in de praktijk is bilinear even goed voor leken, maar het is wel sneller en gebruikt minder resources. Nearest-neigbor is relatief heel snel en goedkoop, alleen iedereen kan vaak meteen zien dat er slecht is geïnterpoleerd.
+in kwaliteit met bilinear interpolation. Bilinear is sneller en gebruikt minder geheugen, dus in de praktijk is bilinear even goed voor leken, maar het is wel sneller en gebruikt minder resources. Nearest-neighbor is relatief heel snel en goedkoop, alleen iedereen kan vaak meteen zien dat er slecht is geïnterpoleerd.
+
+\section{Bronnen}
+\label{sec:org9746756}
+\begin{itemize}
+\item Uitgebreide vergelijking tussen drie eerste methoden \url{https://www.academia.edu/3636528/Comparative\_Analysis\_of\_Different\_Interpolation\_Schemes\_in\_Image\_Processing}
+\item Simpelere vergelijking \url{http://s3.amazonaws.com/academia.edu.documents/38411794/image\_scaling\_comp\_using\_quality\_index\_int\_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A\&Expires=1487856758\&Signature=0a0LAmigralkaS29EuBjeJY5f\%2FQ\%3D\&response-content-disposition=inline\%3B\%20filename\%3DIMAGE\_SCALING\_COMPARISON\_USING\_UNIVERSAL.pdf}
+\item Nuttige site met vergelijkingen \url{http://www.datagenetics.com/blog/december32013/index.html}
+\item Crazy overpowerede methode (edge-directed) \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358\&rep=rep1\&type=pdf}
+\item Voor de wikipedia vergelijkingsplaatjes \url{https://en.wikipedia.org/wiki/Comparison\_gallery\_of\_image\_scaling\_algorithms}
+\item Uitleg over cubic splines (box-sampling) \url{https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content\_uploads/Vorlesung\_3.4\_Resampling.pdf}
+\item Artikel over bicubic \url{http://citeseerx.ist.psu.edu/viewdoc/download?datuoi=10.1.1.320.776\&rep=rep1\&type=pdf}
+\item Codevoorbeelden \url{http://pippin.gimp.org/image\_processing/chap\_resampling.html}
+\end{itemize}
 \end{document}
