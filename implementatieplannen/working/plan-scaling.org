@@ -33,8 +33,7 @@ totaal ongeveer 40.000 pixels, die nog goed herkenbaar is als gezicht.
 * Methoden
 
 # = interpolatiemethoden, niet schalingsmethoden.
-
-Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritmen, namelijk:
+Voor het schalen van afbeeldingen kun je backwards-mapping goed gebruiken, waarbij je vervolgens moet interpoleren om de beste pixelwaarden terug te krijgen. Een aantal bekende interpolatiemethoden zijn:
 - Nearest-neighbor interpolation
 - Bilinear interpolation
 - Bicubic interpolation
@@ -44,24 +43,23 @@ Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritm
 Dit lijstje staat al op volgorde van moeilijkheidsgraad en benodigde
 rekenkracht. Nearest-neighbor interpolation is duidelijk het simpelst,
 terwijl er in edge-directed interpolation recent nog nieuwe
-vooruitgangen zijn geboekt.
+vooruitgangen zijn geboekt. [fn:2][fn:3][fn:4]
 
 Nearest-neighbor tot box-sampling staan ook op omgekeerde volgorde van
 nauwkeurigheid.
 
 Bicubic interpolation heeft alleen wel het nadeel ten opzichte van
 bilinear interpolation dat het overbelichting kan veroorzaken, maar
-heeft wel een groter detailbehoud dan bilinear interpolation.
+heeft wel een groter detailbehoud dan bilinear interpolation.[fn:4]
 
-TODO: Box-sampling heeft dit probleem niet (???) en is nauwkeuriger
+Box-sampling heeft dit probleem niet en is nauwkeuriger
 dan bicubic interpolation, maar is aanzienlijk moeilijker te
-implementeren.
-
+implementeren.[fn:6]
 Box-sampling en bicubic interpolation hebben wel dezelfde benodigde
-rekenkracht [bron].
+rekenkracht.
 
 Edge-directed interpolation is niet per se een nauwkeurigere
-interpolatie methode, dit is terug te zien in [bron], want het focust
+interpolatie methode, dit is terug te zien in [fn:5], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
@@ -89,7 +87,7 @@ Gezien de berekening van elke nieuwe pixel onafhankelijk van andere
 nieuwe pixels is, kunnen we het schalen parallelliseren.
 
 Hieronder volgt per methode een korte beschrijving van de
-implementatie:
+implementatie[fn:7]:
 
 ** Nearest-neighbor
 1. Bereken de nieuwe afmetingen:
@@ -100,6 +98,7 @@ implementatie:
    - Vind de dichtsbijzijnde pixel in het origineel:
      (=round(x*schaal)= , =round(y*schaal)=)
    - Stel (x,y) in op de waarde van deze pixel in het origineel
+
 ** Bilinear
 1. Bereken de nieuwe afmetingen:
    - ~scale = sqrt(40000 / width*height)~
@@ -114,8 +113,8 @@ implementatie:
    - Interpoleer lineair horizontaal punt (X,Y2) tussen (X1,Y2) en (X2,Y2)
    - Interpoleer lineair verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
    - ~(x,y) = (X,Y)~
-** Bicubic
 
+** Bicubic
 1. Bereken de nieuwe afmetingen:
    - ~scale = sqrt(40000 / width*height)~
    - ~(newWidth, newHeight) = (width*scale, height*scale)~
@@ -133,10 +132,9 @@ implementatie:
    - Interpoleer kubisch verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
    - ~(x,y) = (X,Y)~
 
-# XXX WIP.
 
 * Evaluatie
-We willen graag aantonen dat onze methode eventueel sneller of beter
+We willen graag aantonen dat onze methode sneller of beter
 is dan de methode die nu wordt gebruikt voor het schalen.
 
 Daarom denken wij dat het nuttig is om de snelheid en de kwaliteit van
@@ -157,16 +155,7 @@ interpolatie sneller zal zijn omdat wij deze parallel gaan uitvoeren.
 
 We denken dat de bicubic de langzaamste methode is, maar
 waarschijnlijk wel de beste, al zal er niet heel veel verschil zitten
-in kwaliteit met bilinear interpolation. Bilinear is sneller en
-# ?
-
-
-# Hier iets over kwaliteitschecking - vergelijking met andere methoden
-# door te diffen.
-
-# Hier iets over kwaliteitschecking - vergelijking met andere methoden
-# door te diffen.
-# en: performance/geheugenbruik?
+in kwaliteit met bilinear interpolation. Bilinear is sneller en gebruikt minder geheugen, dus in de praktijk is bilinear even goed voor leken, maar het is wel sneller en gebruikt minder resources. Nearest-neigbor is relatief heel snel en goedkoop, alleen iedereen kan vaak meteen zien dat er slecht is geïnterpoleerd.
 
 # Bronnen:
 # Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
@@ -188,5 +177,16 @@ in kwaliteit met bilinear interpolation. Bilinear is sneller en
 \tfrac{1}{2}p_3)x^2 + (-\tfrac{1}{2}p_0 + \tfrac{1}{2}p_2)x + p_1
 \end{math}, waar ~p[0-3]~ de 4 waarden rondom x zijn.
 
+[fn:2] https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
+
+[fn:3] http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
+
+[fn:4] http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
+
+[fn:5] https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
+
+[fn:6] https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
+
+[fn:7] http://pippin.gimp.org/image_processing/chap_resampling.html
 
 # http://www.paulinternet.nl/?page=bicubic

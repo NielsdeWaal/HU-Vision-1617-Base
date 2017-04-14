@@ -1,0 +1,217 @@
+% Created 2017-04-15 Sat 00:08
+% Intended LaTeX compiler: pdflatex
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=3.0cm]{geometry}
+\usepackage[section]{placeins}
+\author{Chris Smeele (1681546), Philippe Zwietering (1685431)}
+\date{22-02-2017}
+\title{Implementatieplan Scaling}
+\hypersetup{
+ pdfauthor={Chris Smeele (1681546), Philippe Zwietering (1685431)},
+ pdftitle={Implementatieplan Scaling},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 24.5.1 (Org mode 9.0.5)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+\section{Doel}
+\label{sec:org3699482}
+Voor het vak Vision van de opleiding HBO-ICT hebben we de opdracht
+gekregen om een stap uit een gezichtsherkenningsproces te herschrijven
+met onze eigen code. Wij hebben hier gekozen voor het schalen van
+afbeeldingen bij het pre-processen. Wij denken dat wij dit minstens zo
+goed kunnen doen als de oplossing die er al is. Het is voor de rest
+van het proces belangrijk dat alle afbeeldingen ongeveer evenveel
+pixels bevatten.
+
+Het probleem dat bij scaling moet worden opgelost is dat afbeeldingen
+tot het juiste formaat worden geschaald, waarbij er rekening mee wordt
+gehouden dat er zo min mogelijk informatie verloren gaat bij het
+omlaag schalen van afbeeldingen.
+
+Bij het opschalen van afbeeldingen moet er juist worden nagedacht hoe
+ervoor wordt gezorgd dat de juiste invulling wordt gegeven aan de
+extra pixels, oftewel interpolatie.
+
+Aan de andere kant is het prettig om het proces zo snel mogelijk te
+laten verlopen. Het verwachte eindresultaat is een afbeelding in
+totaal ongeveer 40.000 pixels, die nog goed herkenbaar is als gezicht.
+
+\section{Methoden}
+\label{sec:org920bb43}
+
+Voor het schalen van afbeeldingen kun je backwards-mapping goed gebruiken, waarbij je vervolgens moet interpoleren om de beste pixelwaarden terug te krijgen. Een aantal bekende interpolatiemethoden zijn:
+\begin{itemize}
+\item Nearest-neighbor interpolation
+\item Bilinear interpolation
+\item Bicubic interpolation
+\item Box sampling
+\item Edge-directed interpolation
+\end{itemize}
+
+Dit lijstje staat al op volgorde van moeilijkheidsgraad en benodigde
+rekenkracht. Nearest-neighbor interpolation is duidelijk het simpelst,
+terwijl er in edge-directed interpolation recent nog nieuwe
+vooruitgangen zijn geboekt. \footnote{\url{https://www.academia.edu/3636528/Comparative\_Analysis\_of\_Different\_Interpolation\_Schemes\_in\_Image\_Processing}}\textsuperscript{,}\,\footnote{\url{http://s3.amazonaws.com/academia.edu.documents/38411794/image\_scaling\_comp\_using\_quality\_index\_int\_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A\&Expires=1487856758\&Signature=0a0LAmigralkaS29EuBjeJY5f\%2FQ\%3D\&response-content-disposition=inline\%3B\%20filename\%3DIMAGE\_SCALING\_COMPARISON\_USING\_UNIVERSAL.pdf}}\textsuperscript{,}\,\footnote{\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358\&rep=rep1\&type=pdf}\label{org36c7428}}
+
+Nearest-neighbor tot box-sampling staan ook op omgekeerde volgorde van
+nauwkeurigheid.
+
+Bicubic interpolation heeft alleen wel het nadeel ten opzichte van
+bilinear interpolation dat het overbelichting kan veroorzaken, maar
+heeft wel een groter detailbehoud dan bilinear interpolation.\textsuperscript{\ref{org36c7428}}
+
+Box-sampling heeft dit probleem niet en is nauwkeuriger
+dan bicubic interpolation, maar is aanzienlijk moeilijker te
+implementeren.\footnote{\url{https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content\_uploads/Vorlesung\_3.4\_Resampling.pdf}}
+Box-sampling en bicubic interpolation hebben wel dezelfde benodigde
+rekenkracht.
+
+Edge-directed interpolation is niet per se een nauwkeurigere
+interpolatie methode, dit is terug te zien in \footnote{\url{https://en.wikipedia.org/wiki/Comparison\_gallery\_of\_image\_scaling\_algorithms}}, want het focust
+vooral op het behouden van edges in het schalingsproces.
+
+\section{Keuze}
+\label{sec:orgeff1d0a}
+Omdat we graag verschillende, veelgebruikte methoden willen vergelijken hebben
+en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
+te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
+interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
+haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld zijn. Daarnaast zijn er
+genoeg dingen die we kunnen meten om een goed onderzoek uit te kunnen voeren.
+
+\section{Implementatie}
+\label{sec:orgfe48506}
+Wij implementeren de drie bovengenoemde schalingsmethoden binnen de
+bestaande HU-Vision repository.
+
+Het schalen is onderdeel van de pre-processing stap van
+gezichtsherkenning. Om deze reden zullen wij de code verwerken in de
+methode \texttt{stepScaleImage()} van de \texttt{StudentPreProcessing} klasse.
+
+Deze functie zal een grijswaardenafbeelding moeten schalen zodat deze,
+zonder de verhoudingen te veranderen, het dichtst bij 40.000 pixels in
+de buurt komt. Bronafbeeldingen die kleiner zijn dan 40.000 pixels
+worden onveranderd geretourneerd.
+
+Gezien de berekening van elke nieuwe pixel onafhankelijk van andere
+nieuwe pixels is, kunnen we het schalen parallelliseren.
+
+Hieronder volgt per methode een korte beschrijving van de
+implementatie\footnote{\url{http://pippin.gimp.org/image\_processing/chap\_resampling.html}}:
+
+\subsection{Nearest-neighbor}
+\label{sec:orgba4310f}
+\begin{enumerate}
+\item Bereken de nieuwe afmetingen:
+\begin{itemize}
+\item \texttt{scale = sqrt(40000 / width*height)}
+\item \texttt{(newWidth, newHeight) = (width*scale, height*scale)}
+\end{itemize}
+\item Maak een afbeelding van de zojuist berekende afmetingen.
+\item Voor elke (x,y) in de nieuwe afbeelding:
+\begin{itemize}
+\item Vind de dichtsbijzijnde pixel in het origineel:
+(\texttt{round(x*schaal)} , \texttt{round(y*schaal)})
+\item Stel (x,y) in op de waarde van deze pixel in het origineel
+\end{itemize}
+\end{enumerate}
+
+\subsection{Bilinear}
+\label{sec:orgb18fa54}
+\begin{enumerate}
+\item Bereken de nieuwe afmetingen:
+\begin{itemize}
+\item \texttt{scale = sqrt(40000 / width*height)}
+\item \texttt{(newWidth, newHeight) = (width*scale, height*scale)}
+\end{itemize}
+\item Maak een afbeelding van de zojuist berekende afmetingen.
+\item Voor elke (x,y) in de nieuwe afbeelding:
+\begin{itemize}
+\item Neem \texttt{(X,Y) = (x/scale, y/scale)} (coördinaten binnen het
+origineel, tussen pixels in).
+\item Neem \texttt{(X1,X2,Y1,Y2) = (floor(X), ceil(X), floor(Y), ceil(Y))}, de
+coördinaten van de dichtsbijzijnde 4 pixels in het origineel.
+\item Interpoleer lineair horizontaal punt (X,Y1) tussen (X1,Y1) en (X2,Y1)
+\item Interpoleer lineair horizontaal punt (X,Y2) tussen (X1,Y2) en (X2,Y2)
+\item Interpoleer lineair verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
+\item \texttt{(x,y) = (X,Y)}
+\end{itemize}
+\end{enumerate}
+
+\subsection{Bicubic}
+\label{sec:org7fe255f}
+\begin{enumerate}
+\item Bereken de nieuwe afmetingen:
+\begin{itemize}
+\item \texttt{scale = sqrt(40000 / width*height)}
+\item \texttt{(newWidth, newHeight) = (width*scale, height*scale)}
+\end{itemize}
+\item Maak een afbeelding van de zojuist berekende afmetingen.
+\item Voor elke (x,y) in de nieuwe afbeelding:
+\begin{itemize}
+\item Neem \texttt{(X,Y) = (x/scale, y/scale)} (coördinaten binnen het
+origineel, tussen pixels in).
+\end{itemize}
+\item Voor elke (x,y) in de nieuwe afbeelding:
+\begin{itemize}
+\item Neem \texttt{(X,Y) = (x/scale, y/scale)} (coördinaten binnen het
+origineel, tussen pixels in).
+\item Neem \texttt{(X1,X2,Y1,Y2) = (floor(X), ceil(X), floor(Y), ceil(Y))}, de
+coördinaten van de dichtsbijzijnde 4 pixels in het origineel.
+\item Interpoleer kubisch horizontaal punt (X,Y1) tussen (X1,Y1) en (X2,Y1)\footnote{Gebruik hiervoor de formule \begin{math} f(p\(_{\text{0,p}}\)\(_{\text{1,p}}\)\(_{\text{2,p}}\)\(_{\text{3,x}}\)) =
+(-\tfrac{1}{2}p\(_{\text{0}}\) + \tfrac{3}{2}p\(_{\text{1}}\) - \tfrac{3}{2}p\(_{\text{2}}\) +
+\tfrac{1}{2}p\(_{\text{3}}\))x\(^{\text{3}}\) + (p\(_{\text{0}}\) - \tfrac{5}{2}p\(_{\text{1}}\) + 2p\(_{\text{2}}\) -
+\tfrac{1}{2}p\(_{\text{3}}\))x\(^{\text{2}}\) + (-\tfrac{1}{2}p\(_{\text{0}}\) + \tfrac{1}{2}p\(_{\text{2}}\))x + p\(_{\text{1}}\)
+\end{math}, waar \texttt{p[0-3]} de 4 waarden rondom x zijn.}
+\item Interpoleer kubisch horizontaal punt (X,Y2) tussen (X1,Y2) en (X2,Y2)
+\item Interpoleer kubisch verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
+\item \texttt{(x,y) = (X,Y)}
+\end{itemize}
+\end{enumerate}
+
+
+\section{Evaluatie}
+\label{sec:org0ec2fbd}
+We willen graag aantonen dat onze methode sneller of beter
+is dan de methode die nu wordt gebruikt voor het schalen.
+
+Daarom denken wij dat het nuttig is om de snelheid en de kwaliteit van
+de verschillende interpolatie methoden met elkaar te vergelijken. Het
+vergelijken van snelheid spreekt voor zich, maar voor het vergelijken
+van kwaliteit is er nog een tussenstap nodig. Het makkelijkst is om
+verschillende methoden te vergelijken door de plaatjes van elkaar af
+te trekken, hierdoor kun je direct zien wat het verschil tussen
+plaatjes is. Op basis van het resultaat kun je vervolgens conclusies
+trekken door te letten op bijvoorbeeld scherpte en het behoud van
+edges. De kwaliteitsverschillen kunnen ook bepaald worden door te
+kijken naar de verschillen in uitkomsten van het gehele
+gezichtsherkenningsproces.
+
+De huidige implementatie van interpolatie is bilinear en
+singlethreaded. Wij verwachten dat onze implementatie van bilineare
+interpolatie sneller zal zijn omdat wij deze parallel gaan uitvoeren.
+
+We denken dat de bicubic de langzaamste methode is, maar
+waarschijnlijk wel de beste, al zal er niet heel veel verschil zitten
+in kwaliteit met bilinear interpolation. Bilinear is sneller en gebruikt minder geheugen, dus in de praktijk is bilinear even goed voor leken, maar het is wel sneller en gebruikt minder resources. Nearest-neigbor is relatief heel snel en goedkoop, alleen iedereen kan vaak meteen zien dat er slecht is geïnterpoleerd.
+\end{document}

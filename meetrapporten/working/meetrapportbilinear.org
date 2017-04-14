@@ -51,7 +51,8 @@ Wat ons nog wel stoort is dat we er niet achter zijn gekomen waarom het OpenCV a
 
 * Appendix
 ** Code bilineaire schaling
-~static IntensityImage *scaleBilinearMt(const IntensityImage &image,
+#+BEGIN_SRC C++
+static IntensityImage *scaleBilinearMt(const IntensityImage &image,
                                        std::tuple<unsigned,unsigned,double> dim,
                                        IntensityImage *out) {
 
@@ -90,4 +91,5 @@ Wat ons nog wel stoort is dat we er niet achter zijn gekomen waarom het OpenCV a
         });
 
     return out;
-}~
+}
+#+END_SRC
