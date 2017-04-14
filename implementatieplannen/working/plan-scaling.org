@@ -34,7 +34,9 @@ totaal ongeveer 40.000 pixels, die nog goed herkenbaar is als gezicht.
 
 # = interpolatiemethoden, niet schalingsmethoden.
 
-Voor het schalen van afbeeldingen zijn er een aantal bekende, mogelijke algoritmen, namelijk:
+Voor interpolatie bij het schalen van afbeeldingen zijn er een aantal
+bekende, mogelijke algoritmen, namelijk:
+
 - Nearest-neighbor interpolation
 - Bilinear interpolation
 - Bicubic interpolation
@@ -53,9 +55,8 @@ Bicubic interpolation heeft alleen wel het nadeel ten opzichte van
 bilinear interpolation dat het overbelichting kan veroorzaken, maar
 heeft wel een groter detailbehoud dan bilinear interpolation.
 
-TODO: Box-sampling heeft dit probleem niet (???) en is nauwkeuriger
-dan bicubic interpolation, maar is aanzienlijk moeilijker te
-implementeren.
+Box-sampling heeft dit probleem niet en is nauwkeuriger dan bicubic
+interpolation, maar is aanzienlijk moeilijker te implementeren.
 
 Box-sampling en bicubic interpolation hebben wel dezelfde benodigde
 rekenkracht [bron].
@@ -65,12 +66,14 @@ interpolatie methode, dit is terug te zien in [bron], want het focust
 vooral op het behouden van edges in het schalingsproces.
 
 * Keuze
-Omdat we graag verschillende, veelgebruikte methoden willen vergelijken hebben
-en de hogere orden methoden waarschijnlijk te moeilijk zijn om door ons geïmplementeerd
-te worden, hebben wij er voor gekozen om nearest-neighbor, bilinear en bicubic
-interpolation te gebruiken om te schalen. We denken dat deze drie methoden zeer
-haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld zijn. Daarnaast zijn er
-genoeg dingen die we kunnen meten om een goed onderzoek uit te kunnen voeren.
+Omdat we graag verschillende, veelgebruikte methoden willen
+vergelijken hebben en de hogere orden methoden waarschijnlijk te
+moeilijk zijn om door ons geïmplementeerd te worden, hebben wij er
+voor gekozen om nearest-neighbor, bilinear en bicubic interpolation te
+gebruiken om te schalen. We denken dat deze drie methoden zeer
+haalbaar zijn, omdat ze wiskundig niet heel ingewikkeld
+zijn. Daarnaast zijn er genoeg dingen die we kunnen meten om een goed
+onderzoek uit te kunnen voeren.
 
 * Implementatie
 Wij implementeren de drie bovengenoemde schalingsmethoden binnen de
@@ -133,8 +136,6 @@ implementatie:
    - Interpoleer kubisch verticaal punt (X,Y) tussen (X,Y1) en (X,Y2)
    - ~(x,y) = (X,Y)~
 
-# XXX WIP.
-
 * Evaluatie
 We willen graag aantonen dat onze methode eventueel sneller of beter
 is dan de methode die nu wordt gebruikt voor het schalen.
@@ -157,26 +158,21 @@ interpolatie sneller zal zijn omdat wij deze parallel gaan uitvoeren.
 
 We denken dat de bicubic de langzaamste methode is, maar
 waarschijnlijk wel de beste, al zal er niet heel veel verschil zitten
-in kwaliteit met bilinear interpolation. Bilinear is sneller en
-# ?
-
-
-# Hier iets over kwaliteitschecking - vergelijking met andere methoden
-# door te diffen.
+in kwaliteit met bilinear interpolation.
 
 # Hier iets over kwaliteitschecking - vergelijking met andere methoden
 # door te diffen.
 # en: performance/geheugenbruik?
 
-# Bronnen:
-# Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
-# Simpelere vergelijking http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
-# Nuttige site met vergelijkingen http://www.datagenetics.com/blog/december32013/index.html
-# Crazy overpowerede methode (edge-directed) http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
-# Voor de wikipedia vergelijkingsplaatjes https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
-# Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
-# Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?datuoi=10.1.1.320.776&rep=rep1&type=pdf
-# Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
+* Bronnen
+- Uitgebreide vergelijking tussen drie eerste methoden https://www.academia.edu/3636528/Comparative_Analysis_of_Different_Interpolation_Schemes_in_Image_Processing
+- Simpelere vergelijking http://s3.amazonaws.com/academia.edu.documents/38411794/image_scaling_comp_using_quality_index_int_conf.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1487856758&Signature=0a0LAmigralkaS29EuBjeJY5f%2FQ%3D&response-content-disposition=inline%3B%20filename%3DIMAGE_SCALING_COMPARISON_USING_UNIVERSAL.pdf
+- Nuttige site met vergelijkingen http://www.datagenetics.com/blog/december32013/index.html
+- Crazy overpowerede methode (edge-directed) http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.358&rep=rep1&type=pdf
+- Voor de wikipedia vergelijkingsplaatjes https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms
+- Uitleg over cubic splines (box-sampling) https://www.ldv.ei.tum.de/fileadmin/w00bfa/www/content_uploads/Vorlesung_3.4_Resampling.pdf
+- Artikel over bicubic http://citeseerx.ist.psu.edu/viewdoc/download?datuoi=10.1.1.320.776&rep=rep1&type=pdf
+- Codevoorbeelden http://pippin.gimp.org/image_processing/chap_resampling.html
 
 # Bronnen in document verwerken
 
