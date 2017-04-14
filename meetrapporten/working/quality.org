@@ -9,16 +9,22 @@
 #+DATE: 04-04-2017
 
 * Doel
+
 Met dit experiment willen wij aantonen of onze implementatie van
 bikubische interpolatie bij schaling een hogere kwaliteit plaatje
-oplevert in vergelijking tot de bestaande, lineair interpolerende
+oplevert in vergelijking tot de bestaande, bilineair interpolerende
 implementatie.
-* Hypothese
-Wij verwachten dat onze implementatie resulteert in een hogere
-kwaliteit dan bereikt kan worden met de lineair interpolerende versie.
 
-# TODO: Stukje over waarom Kubisch ftw.
+* Hypothese
+
+Wij verwachten dat onze implementatie resulteert in een hogere
+kwaliteit dan bereikt kan worden met de bilineair interpolerende versie,
+omdat bikubische interpolatie met meer omliggende pixels rekening houdt
+om de waarde van een nieuwe pixel te bepalen dan bilineaire
+interpolatie.
+
 * Werkwijze
+
 Om de kwaliteit van de interpolatiemethoden te testen vergelijken we
 de resultaten van het gehele gezichtsherkenningproces. Wanneer het
 gebruik van een interpolatiemethode ten opzichte van een andere
@@ -29,32 +35,55 @@ Vanuit de cursus Vision van de HU zijn ons 7 plaatjes aangeleverd om
 mee te testen (zie Appendix). Wij voeren elk plaatje als invoer aan
 het gezichtsherkenningsprogramma, één keer met de bestaande
 interpolatiemethode, en één keer met ons algoritme ingeschakeld.
-* Resultaten
-Ons experiment gaf de volgende resultaten.
 
-| Foto         | Herkenning Bilineair | Herkenning Kubisch |
-|--------------+----------------------+--------------------|
-| child-1.png  | Ja                   | Ja                 |
-| female-1.png | Nee                  | Nee                |
-| female-2.png | Ja                   | Ja                 |
-| female-3.png | Ja                   | Ja                 |
-| male-1.png   | Ja                   | Ja                 |
-| male-2.png   | Nee                  | Nee                |
-| male-3.png   | Ja                   | Ja                 |
-* TODO Verwerking
-# Laat zien hoe je de meetresultaten verwerkt om een conclusie te kunnen
-# trekken. Het is niet nodig om alle berekeningen op te schrijven, als
-# je bijvoorbeeld maar laat zien welke formule(s) je gebruikt voor het
-# verwerken van de meetresultaten en daar zo nodig één
-# voorbeeldberekening aan toevoegt.
-* TODO Conclusie
-# Geef aan welke conclusie kan worden getrokken uit de verwerking van de
-# meetresultaten.
-* TODO Evaluatie
-# Leg een verband tussen de getrokken conclusie en het doel van het
-# experiment (en de hypothese). Ga daarbij ook in op bijvoorbeeld de
-# meetonzekerheid als gevolg van de gebruikte meetmethoden of eventuele
-# meetfouten.
+Tijdens het ontwikkelen van onze schalingsfunctie bleek dat de bestaande
+implementatie niet werkte. Wij hebben samen met onze docent de bug
+onderzocht en opgelost[fn:1].
+
+* Resultaten
+
+Ons experiment gaf de volgende resultaten:
+
+| Foto         | Herkenning Bilineair | Herkenning Bikubisch |
+|--------------+----------------------+----------------------|
+| child-1.png  | Ja                   | Ja                   |
+| female-1.png | Nee                  | Nee                  |
+| female-2.png | Ja                   | Ja                   |
+| female-3.png | Ja                   | Ja                   |
+| male-1.png   | Ja                   | Ja                   |
+| male-2.png   | Nee                  | Nee                  |
+| male-3.png   | Ja                   | Ja                   |
+
+* Verwerking
+
+Beide methoden hebben voor de gegeven testset een slagingspercentage van
+71.
+
+Aangezien onze resultaten voor beide interpolatiemethodes exact
+hetzelfde zijn benodigt dit onderzoek geen verdere verwerking voor
+vergelijking van de resultaten.
+
+* Conclusie
+
+Uit de resultaten van dit onderzoek blijkt dat voor de toepassing
+gezichtsherkenning een schalingsmethode die gebruik maakt van bikubische
+interpolatie geen significant voordeel heeft over bilineaire interpolatie,
+wanneer er gekeken wordt naar het slagingspercentage.
+
+* Evaluatie
+
+Het toepassen van bikubisch schalen gaf tegen onze verwachting in geen
+enkel verschil in het slagingspercentage van de gezichtsherkenning.
+Wij denken dat de voornaamste reden hiervoor is dat de kwaliteit van het
+originele plaatje in combinatie met het soort gezicht een veel grotere
+invloed heeft op het wel of niet doen slagen van de herkenning.
+
+Er is wel degelijk een visueel verschil tussen de uitvoerplaatjes van de
+bilineaire en bikubische methode: De bikubische versie bewaart iets meer
+detail. Maar gezien het kwaliteitsverschil zo klein is zal men in de
+meeste gevallen beter bilineaire interpolatie kunnen toepassen bij
+gezichtsherkenning, vanwege de hogere snelheid van dat algoritme.
+
 * Appendix
 ** Gebruikte testplaatjes
 Wij hebben de volgende plaatjes gebruikt bij dit experiment:
@@ -71,3 +100,8 @@ Wij hebben de volgende plaatjes gebruikt bij dit experiment:
 [[../../testsets/Set A/TestSet Images/male-2.png]]
 
 [[../../testsets/Set A/TestSet Images/male-3.png]]
+
+* Footnotes
+
+[fn:1] https://github.com/arnokamphuis/HU-Vision-1617-Base/pull/3
+
