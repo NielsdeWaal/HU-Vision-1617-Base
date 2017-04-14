@@ -27,21 +27,67 @@ Voor het verschil in snelheid tussen de twee algoritmes is gekeken naar de gemid
 Om het tijdsverschil tussen het begin en einde van de schalingsstap te bepalen is gebruik gemaakt van de chrono namespace van de standaard library van c++ 2014. Aan het begin en einde van de schalingsstap wordt gekeken wat de tijd is met de ~now()~ methode op een ~std::chrono::steady_clock~ en het verschil hiertussen wordt uitgeprint op het scherm in milliseconden, met 6 cijfers achter de komma.
 
 * Resultaten
-We hebben beide implementaties meerdere keren gedraaid op Chris zijn laptop. Hieruit krijgen we de volgende resultaten, tabel [[fig:results]]. De significantie van dit resultaat is platform afhankelijk en daarom zal de nauwkeurigheid per systeem afwijken. We gebruiken echter de ~steady_clock~, en zoals te zien is in de c++-manual is deze specifiek bedoeld voor het meten van tijdsintervallen. We gaan er daarom vanuit dat de nauwkeurigheid minstens goed genoeg is om het verschil in microsecondes goed te kunnen onderscheiden. Dit betekent dat alleen de eerste drie cijfers achter de komma betekenis hebben en dat we de rest weg kunnen gooien. We controleren at compile time dat de resolutie van de tijdmeting nauwkeurig genoeg is, met behulp van een ~static_assert~. Dan krijgen we:
+We hebben beide implementaties 10.000 keer gedraaid op Philippe zijn laptop, met behulp van een Python script. Hieruit krijgen we het volgende gemiddelde, zie tabel [[fig:results]]. De significantie van dit resultaat is platform afhankelijk en daarom zal de nauwkeurigheid per systeem afwijken. We gebruiken echter de ~steady_clock~, en zoals te zien is in de C++-manual is deze specifiek bedoeld voor het meten van tijdsintervallen. We gaan er daarom vanuit dat de nauwkeurigheid minstens goed genoeg is om het verschil in microsecondes goed te kunnen onderscheiden. Dit betekent dat alleen de eerste drie cijfers achter de komma betekenis hebben en dat we de rest weg kunnen gooien. We controleren at compile time dat de resolutie van de tijdmeting nauwkeurig genoeg is, met behulp van een ~static_assert~. Als we alle tienduizend metingen middelen, dan krijgen we:
 
 #+CAPTION: Tijdsduur verschillende implementaties
 #+LABEL: fig:results
-|        | OpenCV algoritme | Eigen algoritme |
-| Nummer | Tijdsduur (ms)   | Tijdsduur (ms)  |
-|--------+------------------+-----------------|
-|        |                  |                 |
+| OpenCV algoritme     | Eigen algoritme |
+|       Tijdsduur (ms) | Tijdsduur (ms)  |
+|----------------------+-----------------|
+| 1.344                | 5.457           |
 
 * Verwerking
+Aangezien alle metingen onder dezelfde omstandigheden op hetzelfde systeem zijn uitgevoerd is het logisch om aan te nemen dat de nauwkeurigheid van alle metingen ook hetzelfde is. In de Resultaten [[Resultaten]] was al bepaald dat onze meetresultaten vier significante cijfers hebben, aangezien de meeste metingen niet boven de 10 milliseconden uitkomen. Ook was het kleinste cijfer achter de komma gegarandeerd, wat betekent dat de standaarddeviatie van iedere meting hoogstens 0.00005 ms is. Dit is verwaarloosbaar ten opzichte van de metingen.
+
+Het verschil tussen beide meetseries is aanzienlijk. Ons eigen algoritme is 4.060 keer langzamer dan het OpenCV algoritme.
 
 * Conclusie
+Uit ons onderzoek is gebleken dat ons bilineaire interpolatie algoritme voor het schalen van afbeeldingen 4 keer langzamer is dan het algoritme dat gebruikt wordt door de OpenCV library. Dit is gemeten door beide algoritmes 10.000 keer te draaien en de tijdsduur te meten met behulp van een standaard C++-library. Dit resultaat is nogal verassend en opvallend groot, we verwachtten zelf immers ook dat ons eigen algoritme sneller zou zijn, vooral omdat het OpenCV algoritme niet multi-threaded is. We weten zelf niet waardoor dit komt, omdat de methode van het algoritme hetzelfde is, het zijn allebei algoritmen voor bilineaire interpolatie.
 
 * Evaluatie
+Het maken van de implementatie van bilineaire interpolatie ging goed. Het multi-threaded maken hebben we zelfs in een template klasse kunnen bouwen. Ook het maken van de andere interpolatie-algoritmen ging relatief soepel. Voor het schrijven van de tekst stelde vooral Philippe steeds uit, wat ertoe leidde dat dit enigszins laat ingeleverd werd. Over de inhoud echter zijn we allebie wel tevreden. 
+
+Wat ons nog wel stoort is dat we er niet achter zijn gekomen waarom het OpenCV algoritme sneller is dan het onze. We hebben het niet expres langzaam gemaakt of anderszins negatief proberen beïnvloeden en we gebruiken zelfs meer resources dan het OpenCV algoritme, juist om te zorgen dat het sneller gaat. Waarschijnlijk zijn de mensen die de OpenCV library hebben ontwikkeld meer ervaren programmeurs dan wij die betere methoden hebben, maar we zouden zelf niet weten hoe ze het daadwerkelijk voor elkaar hebben gekregen. 
 
 * Appendix
 ** Code bilineaire schaling
-~Hier komt code~
+~static IntensityImage *scaleBilinearMt(const IntensityImage &image,
+                                       std::tuple<unsigned,unsigned,double> dim,
+                                       IntensityImage *out) {
+
+    const double origScale = 1 / std::get<2>(dim);
+
+    draadificeer(std::get<1>(dim), [&image, &dim, origScale, out](size_t rowStart, size_t rowCount) {
+
+            for (uint y = rowStart; y < rowStart + rowCount; ++y) {
+
+                double origY = origScale * y;
+                unsigned y1  = floor(origY);
+                unsigned y2  =  ceil(origY);
+
+                double yFrac = origY - (long)origY;
+
+                for (uint x = 0; x < std::get<0>(dim); ++x) {
+                    double origX = origScale * x;
+                    unsigned x1  = floor(origX);
+                    unsigned x2  =  ceil(origX);
+
+                    double xFrac = origX - (long)origX;
+
+                    auto px1y1 = image.getPixel(x1, y1);
+                    auto px1y2 = image.getPixel(x1, y2);
+                    auto px2y1 = image.getPixel(x2, y1);
+                    auto px2y2 = image.getPixel(x2, y2);
+
+                    auto h1 = px1y1 + xFrac * (px2y1 - px1y1);
+                    auto h2 = px1y2 + xFrac * (px2y2 - px1y2);
+
+                    auto v = h1 + yFrac * (h2 - h1);
+
+                    out->setPixel(x, y, v);
+                }
+            }
+        });
+
+    return out;
+}~
