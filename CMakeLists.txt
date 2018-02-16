@@ -20,6 +20,7 @@ set(cxxflags
     "-std=c++14"
     "-g3"
     "-ggdb"
+    "-g"
     "-O1"
     #"-flto"
     ${warnings})
