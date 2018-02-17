@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+\usepackage{amsmath}
 \begin{document}
 \title{Conversion of RGB images to Intensity images}
 \author{Niels de Waal (1698041), Jasper Smienk(103967)}
@@ -21,14 +22,25 @@ Both can be of interest. This could be because testing multiple methods of grey-
 
 \section{Methods}
 
+%Move definition of pixels to here
+
 \subsection{Methods for grey-scaling}
 \subsubsection{Averaging}
+This will be considered as the naive approach to grey-scaling. Here we take the RGB values and using the average of them to calculate the grey-scale value. 
+Say that every pixel \(i \in \left( 0, 1, 2, \dotsc \left( picture_{width} * picture_{height} \right) - 1 \right) \) we have a set of \(\{ R, G, B\}\).
+With these values we do \( \forall i \) the grey-scale is \( \left( i_{R} + i_{G} + i_{B} \right) \div 3 \).
 
+This technique has the advantage that it is very easy to implement and cheap to run. It has the disadvantage that it is not a very good at giving a good representation of a grey-scale image for human eyes.
 \subsubsection{Luma}
+The luma method fixes the problem that averaging has regarding the correctness for the human eye. Luma gives different priorities to different channels. Say that every pixel \(i \in \left( 0, 1, 2, \dotsc \left( picture_{width} * picture_{height} \right) - 1 \right) \) we have a set of \(\{ R, G, B\}\).
+With these values we do \( \forall i \) the grey-scale is \(  \).
 
 \subsubsection{Decomposition}
 
 \subsection{Parallel execution of grey-scaling}
+\subsubsection{SIMD}
+
+\subsubsection{OpenCL}
 
 \section{Choice}
 
