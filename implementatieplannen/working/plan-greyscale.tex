@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+\usepackage{amsmath}
+\begin{document}
+\title{Conversion of RGB images to Intensity images}
+\author{Niels de Waal (1698041), Jasper Smienk(103967)}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Target}
+The assignment of TICT-V2VISN1-13 at the HU, which we have chosen to undertake consists of two different components.
+The first one consists of writing a image shell which has to ability to extract or modify data from a given image.
+The second assignment is to convert an RGB image to an intensity/grey-scale image. 
+
+We will be mostly focusing on the second assignment. This is because we are interested in comparing a few different approaches to this problem.
+
+For the second assignment we will be doing two measuring tests. The first will cover speed across multiple methods of grey-scaling. The second test will revolve around parallel execution of the grey-scaling process.
+
+Both can be of interest. This could be because testing multiple methods of grey-scaling, including testing the speed at which this can be done could have effects when grey-scaling becomes an integral part of a system. This could happen in a real-time face recognition system, where grey-scaling has to be done every frame.
+
+\section{Methods}
+In this section we will discuss several methods of grey-scaling an image.
+
+Let us refer to pixel \(i\) as part of image \(P\), where \(i \in \{0, \dotsc , \left( P_{width} * P_{height} \right) - 1 \} \). Every \(i\) has a set of \( \left(R, G, B \right) \) where \(R\), \(G\) and \(B\) have a range \(\{0, \dotsc ,255 \} \).
+
+\subsection{Methods for grey-scaling}
+\subsubsection{Averaging}
+This will be considered as the naive approach to grey-scaling. Here we take the RGB values and using the average of them to calculate the grey-scale value. 
+With the values: \( \forall i \in P \) the grey-scale is \( \left( i_{R} + i_{G} + i_{B} \right) \div 3 \).
+
+This technique has the advantage that it is very easy to implement and cheap to run. It has the disadvantage that it is not a very good at giving a good representation of a grey-scale image for human eyes.
+\subsubsection{Luma}
+The luma method fixes the problem that averaging has regarding the correctness for the human eye. Luma gives different priorities to different channels.
+With the values: \( \forall i \in P \) the grey-scale is \(  i_{R}*0.2126 + i_{G}*0.7152 + i_{B}*0.0722  \).
+
+With this method we could lose speed in comparison to averaging, because of the multiple floating point operations that have to be done each pixel. The upside is that this method delivers better images, because they are suited for the human eye.
+
+\subsubsection{Decomposition}
+
+\subsection{Parallel execution of grey-scaling}
+\subsubsection{SIMD}
+
+\subsubsection{OpenCL}
+
+\section{Choice}
+
+\section{Implementation}
+
+\section{Evaluation}
+
+\end{document}
