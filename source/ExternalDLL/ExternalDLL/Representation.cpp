@@ -86,11 +86,11 @@ bool Representation::calculateRepresentation(FeatureMap &features, double(&facia
 	double NC = getLength(N, C);
 
 
-	double θl = getAngle(E, Point2D<double>(chinContours[0].x, E.y), chinContours[0]);
-	double θy = getAngle(F, Point2D<double>(chinContours[chinContours.size() - 1].x, F.y), chinContours[chinContours.size() - 1]);
+	double anglel = getAngle(E, Point2D<double>(chinContours[0].x, E.y), chinContours[0]);
+	double angley = getAngle(F, Point2D<double>(chinContours[chinContours.size() - 1].x, F.y), chinContours[chinContours.size() - 1]);
 
-	double α = getAngle(features.getFeature(Feature::FEATURE_NOSE_END_LEFT)[0], features.getFeature(Feature::FEATURE_NOSE_END_RIGHT)[0], X);
-	double β = getAngle(chinContours[0], chinContours[chinContours.size() - 1], C);
+	double alpha = getAngle(features.getFeature(Feature::FEATURE_NOSE_END_LEFT)[0], features.getFeature(Feature::FEATURE_NOSE_END_RIGHT)[0], X);
+	double beta = getAngle(chinContours[0], chinContours[chinContours.size() - 1], C);
 
 	double a = getLength(features.getFeature(Feature::FEATURE_NOSTRIL_LEFT)[0], features.getFeature(Feature::FEATURE_NOSTRIL_RIGHT)[0]);
 	double b = getLength(features.getFeature(Feature::FEATURE_MOUTH_CORNER_LEFT)[0], features.getFeature(Feature::FEATURE_MOUTH_CORNER_RIGHT)[0]);
@@ -110,9 +110,9 @@ bool Representation::calculateRepresentation(FeatureMap &features, double(&facia
 	facialParameters[2] = NC / OC; //Is relative, because divide
 	facialParameters[3] = 0.0; //????????
 	facialParameters[4] = chinContourArea;  //Is relative, because devide (see function)
-	facialParameters[5] = α; //Is relative, because angle
-	facialParameters[6] = (θl + θy) / 2.0; //Is relative, because angle
-	facialParameters[7] = β; //Is relative, because angle
+	facialParameters[5] = alpha; //Is relative, because angle
+	facialParameters[6] = (anglel + angley) / 2.0; //Is relative, because angle
+	facialParameters[7] = beta; //Is relative, because angle
 	facialParameters[8] = XN / XC; //Is relative, because divide
 	facialParameters[9] = NM / XC; //Is relative, because divide
 	facialParameters[10] = (hl + hy) / ST; //Is relative, because divide
