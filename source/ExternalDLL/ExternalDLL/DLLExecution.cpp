@@ -79,7 +79,7 @@ bool DLLExecution::prepareExtraction() {
 	}
 
 	//Create debug image
-	// delete extractionDebug;
+	//delete extractionDebug;
 	extractionDebug = ImageFactory::newRGBImage(resultPreProcessingStep1->getWidth(), resultPreProcessingStep1->getHeight());
 	ImageIO::intensityToRGB(*resultPreProcessingStep1, *extractionDebug);
 
@@ -192,7 +192,9 @@ bool DLLExecution::prepareLocalization() {
 	if (!resultPreProcessingStep4) {
 		return false;
 	}
-	// delete localizationDebug;
+	if (localizationDebug != nullptr) { 
+		//delete localizationDebug;
+	}
 	localizationDebug = ImageFactory::newRGBImage(resultPreProcessingStep4->getWidth(), resultPreProcessingStep4->getHeight());
 	ImageIO::intensityToRGB(*resultPreProcessingStep4, *localizationDebug);
 	hasPreparedLocalization = true;

@@ -20,8 +20,8 @@ int main(int argc, char * argv[]) {
     if (argc == 2)
         inPath = argv[1];
 
-	ImageFactory::setImplementation(*ImageFactory::DEFAULT);
-	// ImageFactory::setImplementation(*ImageFactory::STUDENT);
+	//ImageFactory::setImplementation(*ImageFactory::DEFAULT);
+	ImageFactory::setImplementation(*ImageFactory::STUDENT);
 
 
 	ImageIO::debugFolder = ".";

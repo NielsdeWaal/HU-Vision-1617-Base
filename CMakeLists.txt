@@ -18,11 +18,10 @@ set(warnings
 
 set(cxxflags
     "-std=c++14"
-    "-g0"
-    #"-g3"
-    #"-ggdb"
-    "-O3"
-    "-march=native"
+    "-g3"
+    "-ggdb"
+    "-g"
+    "-O1"
     #"-flto"
     ${warnings})
 
@@ -65,4 +64,4 @@ set (sources
 
 find_package(OpenCV REQUIRED)
 add_executable(vissen ${sources})
-target_link_libraries(vissen ${OpenCV_LIBS} pthread)
+target_link_libraries(vissen ${OpenCV_LIBS})

@@ -1,0 +1,12 @@
+# extensions
+*.png
+*.jpg
+*.cmake
+
+# files
+CMakeCache.txt
+Makefile
+vissen
+
+# folders
+CMakeFiles/*
