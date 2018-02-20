@@ -27,8 +27,9 @@ set(cxxflags
 
 string(REGEX REPLACE ";" " " cxxflags "${cxxflags}")
 
-#set(ldflags
-#    "-flto")
+set(ldflags
+    "-flto"
+    "-lpthread")
 
 string(REGEX REPLACE ";" " " ldflags "${ldflags}")
 

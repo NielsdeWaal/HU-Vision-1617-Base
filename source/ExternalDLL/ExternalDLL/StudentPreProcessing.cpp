@@ -6,7 +6,7 @@
 #include "ImageFactory.h"
 
 #include <iostream>
-
+#include <functional>
 #include <thread>
 #include <vector>
 
