@@ -1,5 +1,7 @@
 \documentclass[a4paper]{article}
 \usepackage{amsmath}
+\usepackage{hyperref}
+
 \begin{document}
 \title{Conversion of RGB images to Intensity images}
 \author{Niels de Waal (1698041), Jasper Smienk(103967)}
@@ -26,20 +28,37 @@ In this section we will discuss several methods of grey-scaling an image.
 Let us refer to pixel \(i\) as part of image \(P\), where \(i \in \{0, \dotsc , \left( P_{width} * P_{height} \right) - 1 \} \). Every \(i\) has a set of \( \left(R, G, B \right) \) where \(R\), \(G\) and \(B\) have a range \(\{0, \dotsc ,255 \} \).
 
 \subsection{Methods for grey-scaling}
+In this sections a few methods for grey-scaling will be discussed.
+There are far too many methods to compare them all, thus in this article we will discuss these three:
+\begin{itemize}
+\item Averaging
+\item Luma
+\item Decomposition
+\end{itemize}
 \subsubsection{Averaging}
 This will be considered as the naive approach to grey-scaling. Here we take the RGB values and using the average of them to calculate the grey-scale value. 
 With the values: \( \forall i \in P \) the grey-scale is \( \left( i_{R} + i_{G} + i_{B} \right) \div 3 \).
 
 This technique has the advantage that it is very easy to implement and cheap to run. It has the disadvantage that it is not a very good at giving a good representation of a grey-scale image for human eyes.
+
 \subsubsection{Luma}
-The luma method fixes the problem that averaging has regarding the correctness for the human eye. Luma gives different priorities to different channels.
+The luma method fixes the problem that averaging has regarding the correctness for the human eye. Luma gives different priorities to different channels. The values for the different channels are described in \cite{HDTV-REC}.
 With the values: \( \forall i \in P \) the grey-scale is \(  i_{R}*0.2126 + i_{G}*0.7152 + i_{B}*0.0722  \).
 
 With this method we could lose speed in comparison to averaging, because of the multiple floating point operations that have to be done each pixel. The upside is that this method delivers better images, because they are suited for the human eye.
 
 \subsubsection{Decomposition}
+Decomposition is the simplest method of grey-scaling. This method of grey-scaling has the advantage that it is very cheap to implement and run. The disadvantage is that, depending on the version used, it can result in a vastly lighter or darker image. 
+With the values: \( \forall i \in P \) the grey-scale is \(  \max(i_{R}, i_{G}, i_{B}) \) or \(  \min(i_{R}, i_{G}, i_{B}) \).
+
+This method is not adjusted for the human eye. 
 
 \subsection{Parallel execution of grey-scaling}
+Grey-scaling an image is often used in computer vision because it makes it easier for the algorithms to recognize edges. When this step has to be done in a real-time system, the amount of processing needed could add up to have a noticeable effect. With this section we explain the 2 possible methods of decreasing the workload caused by grey-scaling. Namely we chose to investigate these two methods:
+\begin{itemize}
+\item SIMD
+\item OpenCL
+\end{itemize}
 \subsubsection{SIMD}
 
 \subsubsection{OpenCL}
@@ -50,4 +69,12 @@ With this method we could lose speed in comparison to averaging, because of the 
 
 \section{Evaluation}
 
+\begin{thebibliography}{9}
+
+\bibitem{HDTV-REC}
+  ITU-R,
+  Recommendation  ITU-R  BT.709-6,
+  \url{http://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.709-6-201506-I!!PDF-E.pdf}
+
+\end{thebibliography}
 \end{document}
