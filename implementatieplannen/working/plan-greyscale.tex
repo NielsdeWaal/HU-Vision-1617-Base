@@ -59,7 +59,14 @@ Grey-scaling an image is often used in computer vision because it makes it easie
 \item SIMD
 \item OpenCL
 \end{itemize}
+
 \subsubsection{SIMD}
+SIMD or "Single Instruction, Multiple Data" describes the action of performing the same action on multiple data points. It can add parallelism to data by performing one instruction on multiple data points at once.
+
+SIMD was introduced in the early 1970s by vector supercomputers, e.g \cite{TI-ASC}.
+Intel was the first to bring SIMD to consumer processors with MMX\cite{INTEL-MMX} on the x86 architecture.
+
+The biggest advantage of SIMD comes when a pieces of data need to have the same operation applied to them using some constant and aren't depended on the outcome of the other data points. For example when 4 points on a 2D plane need to be shifted 4 positions, this can be efficiently done using SIMD.
 
 \subsubsection{OpenCL}
 
@@ -72,9 +79,18 @@ Grey-scaling an image is often used in computer vision because it makes it easie
 \begin{thebibliography}{9}
 
 \bibitem{HDTV-REC}
-  ITU-R,
-  Recommendation  ITU-R  BT.709-6,
-  \url{http://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.709-6-201506-I!!PDF-E.pdf}
+	ITU-R,
+	Recommendation  ITU-R  BT.709-6,	
+	\url{http://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.709-6-201506-I!!PDF-E.pdf}
+  
+\bibitem{TI-ASC}
+	Texas Instruments,
+	\url{https://en.wikipedia.org/wiki/TI_Advanced_Scientific_Computer}
+ 
+\bibitem{INTEL-MMX}
+Intel,
+Pentium processor with MMX,
+\url{https://www.intel.com/content/www/us/en/intelligent-systems/previous-generation/embedded-pentium-mmx.html}
 
 \end{thebibliography}
 \end{document}
