@@ -68,6 +68,8 @@ Intel was the first to bring SIMD to consumer processors with MMX\cite{INTEL-MMX
 
 The biggest advantage of SIMD comes when a pieces of data need to have the same operation applied to them using some constant and aren't depended on the outcome of the other data points. For example when 4 points on a 2D plane need to be shifted 4 positions, this can be efficiently done using SIMD.
 
+SIMD could be of interest for grey-scaling because of it's parallelism on data points. This is especially of interest to us because all of the above mentioned methods for grey-scaling use only data from the same pixel. This means that we can do up to 
+
 \subsubsection{OpenCL}
 
 \section{Choice}
