@@ -68,9 +68,10 @@ Intel was the first to bring SIMD to consumer processors with MMX\cite{INTEL-MMX
 
 The biggest advantage of SIMD comes when a pieces of data need to have the same operation applied to them using some constant and aren't depended on the outcome of the other data points. For example when 4 points on a 2D plane need to be shifted 4 positions, this can be efficiently done using SIMD.
 
-SIMD could be of interest for grey-scaling because of it's parallelism on data points. This is especially of interest to us because all of the above mentioned methods for grey-scaling use only data from the same pixel. This means that we can do up to 
+SIMD could be of interest for grey-scaling because of it's parallelism on data points. This is especially of interest to us because all of the above mentioned methods for grey-scaling use only data from the same pixel. This means that, by using the XMM registers, we can fit multiple pixels in the same register.
 
 \subsubsection{OpenCL}
+OpenCL\cite{OPENCL} or "Open computing language" is a framework for developing cross-platform applications that utilize more efficient resources on different devices.
 
 \section{Choice}
 
@@ -93,6 +94,11 @@ SIMD could be of interest for grey-scaling because of it's parallelism on data p
 Intel,
 Pentium processor with MMX,
 \url{https://www.intel.com/content/www/us/en/intelligent-systems/previous-generation/embedded-pentium-mmx.html}
+
+\bibitem{OPENCL}
+khronos,
+OpenCL home page,
+\url{https://www.khronos.org/opencl/}
 
 \end{thebibliography}
 \end{document}
