@@ -71,7 +71,9 @@ The biggest advantage of SIMD comes when a pieces of data need to have the same 
 SIMD could be of interest for grey-scaling because of it's parallelism on data points. This is especially of interest to us because all of the above mentioned methods for grey-scaling use only data from the same pixel. This means that, by using the XMM registers, we can fit multiple pixels in the same register.
 
 \subsubsection{OpenCL}
-OpenCL\cite{OPENCL} or "Open computing language" is a framework for developing cross-platform applications that utilize more efficient resources on different devices.
+OpenCL\cite{OPENCL} or "Open computing language" is a framework for developing cross-platform applications that utilize more efficient resources on different devices. OpenCL gives us the ability to do a lot of the same things that SIMD can do, but do this on the GPU. The challenge with this approach lies in the fact that the data has to be transported to the GPU, and this operation could take more time than it is worth.
+
+With OpenCL we can write a special kernel that will run on the GPU to do the computation of the grey-scale algorithms. This kernel can handle many datapoints at once, far more than SIMD can. The trade-off OpenCL has with SIMD has to do the transfer to the computation device. The transfer of memory form the host device (e.g the main memory) to the GPU will be considered the the main bottleneck of this approach and will be tested.
 
 \section{Choice}
 
