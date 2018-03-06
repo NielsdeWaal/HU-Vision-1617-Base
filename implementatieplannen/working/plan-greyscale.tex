@@ -76,6 +76,21 @@ OpenCL\cite{OPENCL} or "Open computing language" is a framework for developing c
 With OpenCL we can write a special kernel that will run on the GPU to do the computation of the grey-scale algorithms. This kernel can handle many datapoints at once, far more than SIMD can. The trade-off OpenCL has with SIMD has to do the transfer to the computation device. The transfer of memory form the host device (e.g the main memory) to the GPU will be considered the the main bottleneck of this approach and will be tested.
 
 \section{Choice}
+In this section we will shortly discuss why we chose the afore mentioned methods for grey-scaling and parallel execution.
+
+\subsection{Grey-scaling}
+There are any number of different methods for grey-scaling. Far too many to be explored in this assignment. That is why we will examine the three methods mentioned above.
+We chose these methods of grey-scaling for the following reasons:
+
+\begin{itemize}
+\item Simple
+\item All methods operate on a per pixel basis
+\item Because of the per pixel operations, the methods have a high chance of being run in parallel
+\item Although the operations are similar they still differ enough that a difference should me measurable
+\end{itemize}
+
+\subsection{Parallel execution}
+There are multiple techniques available other than the afore mentioned two. For example we could have chosen to also include multi-threading in our examination, we didn't chose this particular example because from a certain point multi-threading isn't actually true parallel any more. SIMD has this same problem (e.g when all the registers are filled) but this ceiling is higher.
 
 \section{Implementation}
 
