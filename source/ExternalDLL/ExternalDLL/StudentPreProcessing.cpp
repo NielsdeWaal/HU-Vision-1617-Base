@@ -9,6 +9,7 @@
 #include <functional>
 #include <thread>
 #include <vector>
+#include <algorithm>
 
 template<class F, class ...Args>
 static void draadificeer(unsigned jobs, F fun, Args ...args) {
@@ -36,7 +37,32 @@ static void draadificeer(unsigned jobs, F fun, Args ...args) {
 
 
 IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
-    return nullptr;
+	auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
+
+	for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+
+		//Average
+		//intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
+
+		//Luma
+		//intensityImage->setPixel(i, (image.getPixel(i).r * 0.2126 + image.getPixel(i).g * 0.7152 + image.getPixel(i).b * 0.0722));
+
+		//Decomposition; max
+		//intensityImage->setPixel(i, std::max({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
+
+		//Decomposition; min
+		intensityImage->setPixel(i, std::min({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
+
+		//Only red channel
+		//intensityImage->setPixel(i, image.getPixel(i).r);
+
+		//Only green channel
+		//intensityImage->setPixel(i, image.getPixel(i).g);
+
+		//Only blue channel
+		//intensityImage->setPixel(i, image.getPixel(i).b);
+	}
+	return intensityImage;
 }
 
 std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_t desiredPixelCount = 40000) {
