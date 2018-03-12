@@ -11,6 +11,10 @@
 #include <vector>
 #include <algorithm>
 
+#include <boost/compute.hpp>
+
+namespace compute = boost::compute;
+
 template<class F, class ...Args>
 static void draadificeer(unsigned jobs, F fun, Args ...args) {
     auto cores = std::thread::hardware_concurrency();
@@ -39,7 +43,7 @@ static void draadificeer(unsigned jobs, F fun, Args ...args) {
 IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
 	auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
 
-	for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+	/*for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
 
 		//Average
 		//intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
@@ -61,7 +65,73 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 
 		//Only blue channel
 		//intensityImage->setPixel(i, image.getPixel(i).b);
-	}
+	}*/
+        
+        // get the default device
+        compute::device device = compute::system::default_device();
+        compute::context context(device);
+        compute::command_queue queue(context, device);
+
+        const int imageSize = image.getWidth() * image.getHeight();
+
+        std::vector<char> host_r;
+        std::vector<char> host_g;
+        std::vector<char> host_b;
+
+        std::vector<char> host_dest = {0};
+
+        std::cout << "test" << std::endl;
+
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+            host_r.push_back(image.getPixel(i).r);
+            host_g.push_back(image.getPixel(i).g);
+            host_b.push_back(image.getPixel(i).b);
+        }
+
+        compute::vector<char> vector_r(host_r.size(), context);
+        compute::vector<char> vector_g(host_g.size(), context);
+        compute::vector<char> vector_b(host_b.size(), context);
+
+        compute::vector<char> vector_dest(vector_r.size());
+
+        assert(vector_r.size() == vector_dest.size());
+
+        auto R = compute::lambda::get<0>(compute::_1);
+        auto G = compute::lambda::get<1>(compute::_1);
+        auto B = compute::lambda::get<2>(compute::_1);
+
+        auto I = compute::lambda::get<3>(compute::_1);
+
+        std::cout << vector_r[0] << "\n";
+        std::cout << vector_r[1] << "\n";
+        std::cout << vector_r[2] << "\n";
+        std::cout << vector_r[3] << std::endl;;
+
+        boost::compute::for_each(
+            boost::compute::make_zip_iterator(
+                boost::make_tuple(
+                    vector_r.begin(), vector_g.begin(), vector_b.begin(), vector_dest.begin()
+                )
+            ),
+            boost::compute::make_zip_iterator(
+                boost::make_tuple(
+                    vector_r.end(), vector_g.end(), vector_b.end(), vector_dest.end()
+                )
+            ),
+            boost::compute::lambda::make_tuple(
+                I = (R + G + B)/ 3
+            ),
+            queue
+        );
+
+        std::cout << "test" << std::endl;
+
+        compute::copy(vector_dest.begin(), vector_dest.end(), host_dest.begin(), queue);  
+
+        for(int i = 0; i < sizeof(host_dest); i++) {
+            intensityImage->setPixel(i, host_dest[i]);
+        }
+
 	return intensityImage;
 }
 

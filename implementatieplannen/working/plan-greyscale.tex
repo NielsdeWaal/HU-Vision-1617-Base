@@ -2,6 +2,30 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
 \begin{document}
 \title{Conversion of RGB images to Intensity images}
 \author{Niels de Waal (1698041), Jasper Smienk(1700502)}
@@ -92,7 +116,70 @@ We chose these methods of grey-scaling for the following reasons:
 \subsection{Parallel execution}
 There are multiple techniques available other than the afore mentioned two. For example we could have chosen to also include multi-threading in our examination, we didn't chose this particular example because from a certain point multi-threading isn't actually true parallel any more. SIMD has this same problem (e.g when all the registers are filled) but this ceiling is higher.
 
+\newpage
+
 \section{Implementation}
+In this section we present the implementations of the different methods.
+
+\subsection{Grey-scaling}
+What follows are the different methods of grey-scaling, implemented in the framework required for this assignment.
+
+The average method:
+\lstset{language=C++}
+\begin{lstlisting}
+IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
+        auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
+
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+
+                //Average
+                intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
+
+        }
+        return intensityImage;
+}
+
+\end{lstlisting}
+
+The luma method:
+\lstset{language=C++}
+\begin{lstlisting}
+IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
+        auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
+
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+
+                //Luma
+                intensityImage->setPixel(i, (image.getPixel(i).r * 0.2126 + image.getPixel(i).g * 0.7152 + image.getPixel(i).b * 0.0722));
+
+
+        }
+        return intensityImage;
+}
+
+\end{lstlisting}
+\newpage
+
+The decomposition method:
+\lstset{language=C++}
+\begin{lstlisting}
+IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
+        auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
+
+        for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+
+                //Decomposition; max
+                //intensityImage->setPixel(i, std::max({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
+
+                //Decomposition; min
+                intensityImage->setPixel(i, std::min({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
+
+
+        }
+        return intensityImage;
+}
+
+\end{lstlisting}
 
 \section{Evaluation}
 
