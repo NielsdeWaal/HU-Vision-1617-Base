@@ -37,7 +37,7 @@ int main(int argc, char * argv[]) {
 
 
 	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
-	
+
 	if (true) {
 		unsigned long total = 0;
 		int loops = 10000;
@@ -85,8 +85,6 @@ bool executeSteps(DLLExecution * executor) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
 		return false;
 	}
-
-        return true;
 
 	if (!executor->executePreProcessingStep2(false)) {
 		std::cout << "Pre-processing step 2 failed!" << std::endl;
