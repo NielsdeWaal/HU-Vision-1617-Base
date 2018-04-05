@@ -22,7 +22,7 @@ set(cxxflags
     "-ggdb"
     "-g"
     "-O1"
-    "-I/usr/include/boost/compute/"
+    #"-I/usr/include/boost/compute/"
     #"-flto"
     ${warnings})
 
@@ -30,7 +30,7 @@ string(REGEX REPLACE ";" " " cxxflags "${cxxflags}")
 
 set(ldflags
     "-flto"
-    "-lOpenCL"
+    #"-lOpenCL"
     "-lpthread")
 
 string(REGEX REPLACE ";" " " ldflags "${ldflags}")

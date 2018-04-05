@@ -5,6 +5,7 @@
 */
 
 #include <iostream> //std::cout
+#include <chrono>
 #include "ImageIO.h" //Image load and save functionality
 #include "HereBeDragons.h"
 #include "ImageFactory.h"
@@ -25,7 +26,7 @@ int main(int argc, char * argv[]) {
 
 
 	ImageIO::debugFolder = ".";
-	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
+	ImageIO::isInDebugMode = false; //If set to false the ImageIO class will skip any image save function calls
 
 
 	RGBImage * input = ImageFactory::newRGBImage();
@@ -36,6 +37,22 @@ int main(int argc, char * argv[]) {
 
 
 	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
+	
+	if (true) {
+		unsigned long total = 0;
+		int loops = 10000;
+		for (int loop = 0; loop < loops; loop++) {
+			auto start = std::chrono::system_clock::now();
+			DLLExecution * executor = new DLLExecution(input);
+			executeSteps(executor);
+			delete executor;
+			auto delta = std::chrono::system_clock::now()-start;
+			std::cout << delta.count() << std::endl;
+			total += delta.count();
+		}
+		std::cout << "Average: " << (total / loops) << std::endl;
+		return 1;
+	}
 
 	DLLExecution * executor = new DLLExecution(input);
 

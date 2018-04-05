@@ -13,11 +13,11 @@
 #include <vector>
 #include <algorithm>
 
-#include <boost/compute.hpp>
+//#include <boost/compute.hpp>
 
-#define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION = 1
+//#define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION = 1
 
-namespace compute = boost::compute;
+//namespace compute = boost::compute;
 
 template<class F, class ...Args>
 static void draadificeer(unsigned jobs, F fun, Args ...args) {
@@ -47,7 +47,7 @@ static void draadificeer(unsigned jobs, F fun, Args ...args) {
 IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &image) const {
 	auto* intensityImage = new IntensityImageStudent(image.getWidth(), image.getHeight());
 
-	/*for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
+	for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
 
 		//Average
 		//intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
@@ -59,7 +59,7 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 		//intensityImage->setPixel(i, std::max({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
 
 		//Decomposition; min
-		intensityImage->setPixel(i, std::min({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
+		//intensityImage->setPixel(i, std::min({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));
 
 		//Only red channel
 		//intensityImage->setPixel(i, image.getPixel(i).r);
@@ -69,8 +69,9 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 
 		//Only blue channel
 		//intensityImage->setPixel(i, image.getPixel(i).b);
-	}*/
-        
+	}
+
+        /*
         // get the default device
         auto device = compute::system::default_device();
         auto context = compute::context(device);
@@ -188,6 +189,7 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
         //std::cout << "test" << std::endl;
 
         //compute::copy(vector_dest.begin(), vector_dest.end(), host_dest.begin(), queue);  
+	*/
 }
 
 std::tuple<uint,uint,double> getNewDimensions(const IntensityImage &image, size_t desiredPixelCount = 40000) {
