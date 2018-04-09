@@ -1,6 +1,8 @@
 \documentclass[a4paper]{article}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
 
 \usepackage{listings}
 \usepackage{color}
@@ -27,7 +29,7 @@
 }
 
 \begin{document}
-\title{*Meetrapport* speed across multiple methods of grey-scaling}
+\title{Measurement analysis of speed across multiple methods of grey-scaling}
 \author{Niels de Waal (1698041), Jasper Smienk(1700502)}
 \maketitle
 \newpage
@@ -36,7 +38,7 @@
 \newpage
 
 \section{Target}
-With this *meetrapport* we want to find out how fast each grey-scaling method is and compare them to each other and the default implementation.
+With this measurement analysis we want to find out how fast each grey-scaling method is and compare them to each other and the default implementation.
 
 These results can help improve the speed of the facial recognition because converting an image to grey-scale is one of the steps that need to be done.
 
@@ -46,16 +48,86 @@ We suspect that of our methods the \textit{decomposition} will be the fastest, a
 We can't say anything about how they will perform against the default implementation, as we don't know how it works.
 
 \section{Method}
-For each grey-scaling method, we will run it 1000 times and see how long it took from the start to the end. We will make sure the tests are run on the same laptop and keep an eye out on the temperature to make sure it does not thermal-throttle.
+For each grey-scaling method, we will run it 10000 times and see how long it took from the start to the end. From this we will calculate the average time it took.
 
+The test will be run twice for each method, once with the facial recognition, and once without.
 
+We will make sure the tests are run on the same laptop and keep an eye out on the temperature to make sure it does not thermal-throttle.
+
+\newpage
 \section{Results}
+\subsection{Raw data}
+\begin{center}
+\begin{tabular}{ |l||r|r| }
+\hline
+Method & Speed total (ms) & Speed greyscale only (ms) \\
+\hline\hline
+Default & 6287400 & 457354 \\
+\hline
+Averaging & 6254653 & 430275 \\
+\hline
+Luma & 6555633 & 568484 \\
+\hline
+Decomposition (Max) & 6036561 & 468192 \\
+\hline
+Decomposition (Min) & 6339750 & 467159 \\
+\hline
+\end{tabular}
+\end{center}
 
-\section{*Verwerking*}
+\subsection{Visualized}
+\begin{tikzpicture}
+	\begin{axis}[
+		title=With image recognition,
+		xbar, xmin=6000000,
+		width=12cm,
+		height=7cm,
+		enlarge y limits=0.5,
+		xlabel={ms},
+		ylabel={Method},
+		symbolic y coords={Default,Averaging,Luma,Decomposition Max,Decomposition Min},
+		ytick=data,
+		nodes near coords, nodes near coords align={horizontal},
+	]
+		\addplot coordinates{(6287400,Default) (6254653,Averaging) (6555633,Luma) (6036561,Decomposition Max) (6339750,Decomposition Min)};
+	\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+	\begin{axis}[
+		title=Without image recognition,
+		xbar, xmin=400000,
+		width=12cm,
+		height=7cm,
+		enlarge y limits=0.5,
+		xlabel={ms},
+		ylabel={Method},
+		symbolic y coords={Default,Averaging,Luma,Decomposition Max,Decomposition Min},
+		ytick=data,
+		nodes near coords, nodes near coords align={horizontal},
+	]
+		\addplot coordinates{(457354,Default) (430275,Averaging) (568484,Luma) (468192,Decomposition Max) (467159,Decomposition Min)};
+	\end{axis}
+\end{tikzpicture}
+
+\section{Processing}
+When looking solely at which method is the fastest grey-scale method, averaging comes out ahead. Followed by the default method and both decomposition methods. At last is Luma, which was expected.
+
+However, decomposition max comes out ahead when you also consider the computation time of the facial recognition that follows. Then comes averaging, the default and decomposition min. Luma is last yet again.
 
 \section{Conclusion}
+Depending on what you need, different methods are applicable. If you just want the fastest method, use averaging. However, if you want to use it with facial recognition, use decomposition max.
+
+An other observation is that the facial recognition with the Luma method is noticeable slower, even though the grey-scaling is a small part of the whole process. This means that even though Luma makes the (subjectively) best looking images for the human eye, they make the facial recognition slower.
 
 \section{Evaluation}
+\subsection{What went well}
+The project was a very cooperative experience for both parties involved. This cooperation went very well, everyone had their tasks and did them with equal amount of dedication. This made the project an overall pleasant experience.
+\subsection{What went wrong}
+We both had a vigorous start with the project, however it turned out to be very hard to keep up this speed. Eventually we started to have to divide our time to other projects that required our attention at the time. This made it so we had to do a lot of work near the deadline.
+
+Also the original plan was to use OpenCL and SIMD for parallelism. Because of the state of the relevant tools, this turned out to be quite a bit harder than was originally thought.
+\subsection{What could be done differently}
+A better research on the more ambitious subjects should be done in order to avoid unnecessary delays.
 
 \begin{thebibliography}{9}
 \end{thebibliography}

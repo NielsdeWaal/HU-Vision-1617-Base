@@ -42,10 +42,10 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 	for (int i = 0; i < (image.getWidth() * image.getHeight()); i++) {
 
 		//Average
-		//intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
+		intensityImage->setPixel(i, ((image.getPixel(i).r + image.getPixel(i).g + image.getPixel(i).b) / 3));
 
 		//Luma
-		intensityImage->setPixel(i, (image.getPixel(i).r * 0.2126 + image.getPixel(i).g * 0.7152 + image.getPixel(i).b * 0.0722));
+		//intensityImage->setPixel(i, (image.getPixel(i).r * 0.2126 + image.getPixel(i).g * 0.7152 + image.getPixel(i).b * 0.0722));
 
 		//Decomposition; max
 		//intensityImage->setPixel(i, std::max({image.getPixel(i).r, image.getPixel(i).g, image.getPixel(i).b}));

@@ -47,7 +47,7 @@ int main(int argc, char * argv[]) {
 			executeSteps(executor);
 			delete executor;
 			auto delta = std::chrono::system_clock::now()-start;
-			std::cout << delta.count() << std::endl;
+			//std::cout << delta.count() << std::endl;
 			total += delta.count();
 		}
 		std::cout << "Average: " << (total / loops) << std::endl;
@@ -81,10 +81,12 @@ int main(int argc, char * argv[]) {
 bool executeSteps(DLLExecution * executor) {
 
 	//Execute the four Pre-processing steps
-	if (!executor->executePreProcessingStep1(true)) {
+	if (!executor->executePreProcessingStep1(false)) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
 		return false;
 	}
+
+	return true;
 
 	if (!executor->executePreProcessingStep2(false)) {
 		std::cout << "Pre-processing step 2 failed!" << std::endl;
