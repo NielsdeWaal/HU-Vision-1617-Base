@@ -42,7 +42,7 @@
 \section{Target}
 With this measurement analysis we want to find out how fast each grey-scaling method is and compare them to each other and the default implementation.
 
-These results can help improve the speed of the facial recognition because converting an image to grey-scale is one of the steps that needs to be done. This step needs to be done for every frame to improve the facial recognition success rates. Doing this every frame can add up to a lot of computation time, while there is a lot of computation necessary for each frame.
+These results can help improve the speed of the facial recognition because converting an image to grey-scale is one of the steps that needs to be done. This step needs to be done for every frame to improve the facial recognition success rates. Having to do the grey-scaling every frame could, over time, add up to a lot of computation. While this time could be of high value in applications where the recognition process needs to be done in real-time.
 
 \section{Hypothesis}
 We suspect that of our methods the \textit{decomposition} will be the fastest, as it required very little computation. Followed by \textit{averaging} and lastly \textit{luma}.
@@ -125,16 +125,16 @@ Decomposition (Min) & 6339750 & 467159 \\
 \end{tikzpicture}
 
 \section{Processing}
-When looking solely at which method is the fastest grey-scale method, averaging comes out ahead. Followed by the default method and both decomposition methods. At last is Luma, which was expected.
+When looking solely at which method is the fastest grey-scale method, \textit{averaging} comes out ahead. Followed by the default method and both \textit{decomposition} methods. At last is \textit{Luma}, which was expected.
 
-We suspect luma to be the slowest because of the necessary floating point calculations involved. 
+We suspect \textit{luma} to be the slowest because of the necessary floating point calculations involved. 
 
-However, decomposition max comes out ahead when you also consider the computation time of the facial recognition that follows. Then comes averaging, the default and decomposition min. Luma is last yet again.
+However, \textit{decomposition} max comes out ahead when you also consider the computation time of the facial recognition that follows. Then comes \textit{averaging}, the default and \textit{decomposition} min. \textit{Luma} is last yet again.
 
 \section{Conclusion}
-Depending on what you need, different methods are applicable. If you just want the fastest method, use averaging. However, if you want to use it with facial recognition, use decomposition max.
+Depending on what you need, different methods are applicable. If you just want the fastest method, use \textit{averaging}. However, if you want to use it with facial recognition, use \textit{decomposition} max.
 
-An other observation is that the facial recognition with the Luma method is noticeable slower, even though the grey-scaling is a small part of the whole process. This means that even though Luma makes the (subjectively) best looking images for the human eye, they make the facial recognition slower.
+An other observation is that the facial recognition with the \textit{Luma} method is noticeable slower, even though the grey-scaling is a small part of the whole process. This means that even though \textit{Luma} makes the (subjectively) best looking images for the human eye, they make the facial recognition slower.
 
 \section{Evaluation}
 \subsection{What went well}
