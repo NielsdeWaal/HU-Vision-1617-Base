@@ -51,7 +51,7 @@ We can't say anything about how they will perform against the default implementa
 We suspect there will be very little difference between the different methods when they will be examined on their own. It is unlikely that the results will change with or without the facial recognition enabled. We do expect to see a lot of data going to the L2 cache. This because the cpu pre-fetcher should see the sequential reads from the pixel buffer and try to cache data ahead of these reads.
 
 \section{Method}
-The binary will run one of the grey-scaling methods 10000 times, and we will run this binary 10 times, after which we will aggregate the results. We will use the \textit{perf} tool for collecting the data. \textit{Perf} is a linux tool often used for measuring kernel performance. In this test we will look at both L1-dcache and L2 cache. Seeing how a single pixel is quite small in terms of the size of the data (3 * 8 bits). It could be benificial to know where most of the data ends up.
+The binary will run one of the grey-scaling methods 10000 times, and we will run this binary 10 times, after which we will aggregate the results. We will use the \textit{perf} tool for collecting the data. \textit{Perf} is a linux tool often used for measuring kernel performance. In this test we will look at both L1-dcache and L2 cache. Seeing how a single pixel is quite small in terms of the size of the data (3 * 8 bits). It could be beneficial to know where most of the data ends up.
 
 The test will be run twice for each method, once with the facial recognition, and once without.
 
@@ -64,6 +64,8 @@ Specifications of the used laptop:
     CPU & Intel Core i5 6600K \cite{ARK} \\ \hline
     RAM & 16GB DDR4 2400MHz \\ \hline
     OS & Linux 4.15.15-1-ARCH \\ \hline
+    L1 DCache & 32K \\ \hline
+    L2 Cache & 256K \\ \hline
     \end{tabular}
 \end{center}
 
@@ -92,7 +94,7 @@ Used compiler warnings:
 
 Perf command used:
 \begin{lstlisting}[language=bash]
-	$ perf stat -r 10 -d -e l2_rqsts.demand_data_rd_hit,l2_rqsts.demand_data_rd_miss ./vissen}
+	$ perf stat -r 10 -d -e l2_rqsts.demand_data_rd_hit,l2_rqsts.demand_data_rd_miss ./vissen
 \end{lstlisting}
 
 \newpage
@@ -186,6 +188,9 @@ As predicted in our hypothesis the different methods are within margin of each o
 
 According to our measurements it seems that both \textit{Decomposition} and \textit{Luma} perform almost identical.
 
+There is one observation that can be made regarding data sizes and the cache. That it seems that the L1 DCache is used a lot more that the L2 cache. It seems that the cache lanes are big enough to fit a few pixels in, and it seems like the pre-fetcher recognizes that we are sequentially reading these pixels.
+One problem appears here, we can't see what is in the cache. Because the cache is transparent to the actual OS, it is impossible to see what is truly in the cache. This makes impossible to verify the pixels are being stored here, also it makes it impossible to see how many pixels are stored in the cache.
+
 \section{Conclusion}
 From these measurements we can't come to a clear conclusion about a which is the better method. It seems that data from different aspects of these methods is needed to declare a winner of sorts. We can only really state that \textit{Decomposition Max} is inadvisable as it produces bad images.
 
@@ -198,6 +203,39 @@ We both had a vigorous start with the project, however it turned out to be very 
 Also the original plan was to use OpenCL and SIMD for parallelism. Because of the state of the relevant tools, this turned out to be quite a bit harder than was originally thought.
 \subsection{What could be done differently}
 A better research on the more ambitious subjects should be done in order to avoid unnecessary delays.
+
+\newpage
+\section{Additional information}
+In this section there will be additional information about the system where the tests where run on.
+\subsection{LSCPU}
+\begin{lstlisting}[language=bash]
+	Architecture:        x86_64
+	CPU op-mode(s):      32-bit, 64-bit
+	Byte Order:          Little Endian
+	CPU(s):              4
+	On-line CPU(s) list: 0-3
+	Thread(s) per core:  1
+	Core(s) per socket:  4
+	Socket(s):           1
+	NUMA node(s):        1
+	Vendor ID:           GenuineIntel
+	CPU family:          6
+	Model:               94
+	Model name:          Intel(R) Core(TM) i5-6600K CPU @ 3.50GHz
+	Stepping:            3
+	CPU MHz:             4100.012
+	CPU max MHz:         4100.0000
+	CPU min MHz:         800.0000
+	BogoMIPS:            7008.00
+	Virtualization:      VT-x
+	L1d cache:           32K
+	L1i cache:           32K
+	L2 cache:            256K
+	L3 cache:            6144K
+	NUMA node0 CPU(s):   0-3
+	Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+\end{lstlisting}
 
 \begin{thebibliography}{9}
 
