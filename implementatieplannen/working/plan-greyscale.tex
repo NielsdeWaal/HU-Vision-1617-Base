@@ -42,7 +42,7 @@ The second assignment is to convert an RGB image to an intensity/grey-scale imag
 
 We will be mostly focusing on the second assignment. This is because we are interested in comparing a few different approaches to this problem.
 
-For the second assignment we will be doing two measuring tests. The first will cover speed across multiple methods of grey-scaling. The second test will revolve around parallel execution of the grey-scaling process.
+For the second assignment we will be doing two measuring tests. The first will cover speed across multiple methods of grey-scaling. The second test will revolve around effects on the cpu cache across the different methods of grey-scaling.
 
 Both can be of interest. This could be because testing multiple methods of grey-scaling, including testing the speed at which this can be done could have effects when grey-scaling becomes an integral part of a system. This could happen in a real-time face recognition system, where grey-scaling has to be done every frame.
 
@@ -77,30 +77,13 @@ With the values: \( \forall i \in P \) the grey-scale is \(  \max(i_{R}, i_{G}, 
 
 This method is not adjusted for the human eye. 
 
-\subsection{Parallel execution of grey-scaling}
-Grey-scaling an image is often used in computer vision because it makes it easier for the algorithms to recognize edges. When this step has to be done in a real-time system, the amount of processing needed could add up to have a noticeable effect. With this section we explain the 2 possible methods of decreasing the workload caused by grey-scaling. Namely we chose to investigate these two methods:
-\begin{itemize}
-\item SIMD
-\item OpenCL
-\end{itemize}
+\subsection{Cache}
+Cache is an imported part of modern cpu architectures. Cpu cache can significantly increase the speed of piece of software. This is because it eliminates the time required of waiting for an value from memory. It does this by loading values from memory ahead of time and writing them to the on-die memory inside the cpu. 
 
-\subsubsection{SIMD}
-SIMD or "Single Instruction, Multiple Data" describes the action of performing the same action on multiple data points. It can add parallelism to data by performing one instruction on multiple data points at once.
-
-SIMD was introduced in the early 1970s by vector supercomputers, e.g \cite{TI-ASC}.
-Intel was the first to bring SIMD to consumer processors with MMX\cite{INTEL-MMX} on the x86 architecture.
-
-The biggest advantage of SIMD comes when a pieces of data need to have the same operation applied to them using some constant and aren't depended on the outcome of the other data points. For example when 4 points on a 2D plane need to be shifted 4 positions, this can be efficiently done using SIMD.
-
-SIMD could be of interest for grey-scaling because of it's parallelism on data points. This is especially of interest to us because all of the above mentioned methods for grey-scaling use only data from the same pixel. This means that, by using the XMM registers, we can fit multiple pixels in the same register.
-
-\subsubsection{OpenCL}
-OpenCL\cite{OPENCL} or "Open computing language" is a framework for developing cross-platform applications that utilize more efficient resources on different devices. OpenCL gives us the ability to do a lot of the same things that SIMD can do, but do this on the GPU. The challenge with this approach lies in the fact that the data has to be transported to the GPU, and this operation could take more time than it is worth.
-
-With OpenCL we can write a special kernel that will run on the GPU to do the computation of the grey-scale algorithms. This kernel can handle many datapoints at once, far more than SIMD can. The trade-off OpenCL has with SIMD has to do the transfer to the computation device. The transfer of memory form the host device (e.g the main memory) to the GPU will be considered the the main bottleneck of this approach and will be tested.
+The algorithms and processes by which the cpu decides what values to load is far beyond the scope of this document.
 
 \section{Choice}
-In this section we will shortly discuss why we chose the afore mentioned methods for grey-scaling and parallel execution.
+In this section we will shortly discuss why we chose the afore mentioned methods for grey-scaling.
 
 \subsection{Grey-scaling}
 There are any number of different methods for grey-scaling. Far too many to be explored in this assignment. That is why we will examine the three methods mentioned above.
@@ -112,9 +95,6 @@ We chose these methods of grey-scaling for the following reasons:
 \item Because of the per pixel operations, the methods have a high chance of being run in parallel
 \item Although the operations are similar they still differ enough that a difference should me measurable
 \end{itemize}
-
-\subsection{Parallel execution}
-There are multiple techniques available other than the afore mentioned two. For example we could have chosen to also include multi-threading in our examination, we didn't chose this particular example because from a certain point multi-threading isn't actually true parallel any more. SIMD has this same problem (e.g when all the registers are filled) but this ceiling is higher.
 
 \newpage
 
@@ -182,6 +162,17 @@ IntensityImage * StudentPreProcessing::stepToIntensityImage(const RGBImage &imag
 \end{lstlisting}
 
 \section{Evaluation}
+In this section we will discuss the 2 different aspects of the grey-scaling methods that will be measured.
+
+\subsection{Speed}
+We will be measuring and comparing the speed of the already discussed methods for grey-scaling. This could be of benefit to anyone wanting to run facial recognition in real-time. These kinds of systems need to process every frame at a relatively high frame-rate. This means that if some time could be saved on the processing of each frame, it would increase the time available to process the rest of a frame.
+
+The speed will be measured by measuring the time required to run through the process of either just grey-scaling, or the full facial recognition process. Our hypothesis is available in our measurement report.
+
+\subsection{Cache behaviour}
+This one ties in with the speed measurements. Here we will attempt to find out which of the methods for grey-scaling have the most benefit from the cache. This will be measured by comparing the amount of cache hits and misses. This will give an idea about the efficiency of the methods with regards to cpu caches.
+
+When one method seems to better synergy with the cache, those results could be tied to the results from the first measurement report. We won't be doing that in our measurement report as it will be outside the scope of the measurements presented in those reports.
 
 \begin{thebibliography}{9}
 
